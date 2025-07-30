@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "MyDrive",
+    "slug": "myDriveApp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/aviva-logo.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "scheme": "mydriveapp",
+    "splash": {
+      "image": "./assets/aviva-logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/aviva-logo.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/aviva-logo.png"
+    }
+  }
+}
