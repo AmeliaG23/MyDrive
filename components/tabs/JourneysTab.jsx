@@ -1,11 +1,13 @@
+import { formatDate } from "@/utils";
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Modal,
   FlatList,
+  Modal,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import TabStyles from "../../styles/TabStyles";
@@ -24,6 +26,7 @@ function getScoreColor(score) {
 
 export default function JourneysTab({ journeys, filter, setFilter }) {
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const navigation = useNavigation();
 
   const now = Date.now();
   const filteredJourneys = journeys.filter((j) => {
@@ -97,26 +100,50 @@ export default function JourneysTab({ journeys, filter, setFilter }) {
       ) : (
         <ScrollView contentContainerStyle={TabStyles.container}>
           {filteredJourneys.map((j, i) => (
-            <View key={i} style={TabStyles.card}>
-              <Text style={TabStyles.cardTitle}>Date: {j.date}</Text>
-
-              {/* Score progress bar */}
-              <View style={{ marginVertical: 6 }}>
-                <Text style={{ marginBottom: 4, fontWeight: "600" }}>
-                  Score: {j.score}/100
-                </Text>
-                <View style={TabStyles.progressBar}>
-                  <View
-                    style={[
-                      TabStyles.progressFill,
-                      {
-                        width: `${j.score}%`,
-                        backgroundColor: getScoreColor(j.score),
-                      },
-                    ]}
-                  />
-                </View>
+            <TouchableOpacity
+              key={i}
+              style={TabStyles.card}
+              activeOpacity={0.7}
+              onPress={() =>
+                navigation.navigate("JourneyScreen", { journey: j })
+              }
+            >
+              {/* Date with calendar icon */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 8,
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="calendar-outline"
+                  size={20}
+                  color="#333"
+                  style={{ marginRight: 6 }}
+                />
+                <Text style={TabStyles.cardTitle}>{formatDate(j.date)}</Text>
               </View>
+
+              {/* Score progress bar, only if score exists */}
+              {j.scores?.total !== undefined && (
+                <View style={{ marginVertical: 6 }}>
+                  <Text style={{ marginBottom: 4, fontWeight: "600" }}>
+                    Score: {j.scores.total}/100
+                  </Text>
+                  <View style={TabStyles.progressBar}>
+                    <View
+                      style={[
+                        TabStyles.progressFill,
+                        {
+                          width: `${j.scores.total}%`,
+                          backgroundColor: getScoreColor(j.scores.total),
+                        },
+                      ]}
+                    />
+                  </View>
+                </View>
+              )}
 
               {/* Duration row with icon */}
               <View
@@ -136,7 +163,7 @@ export default function JourneysTab({ journeys, filter, setFilter }) {
                   {j.length} mins
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           ))}
         </ScrollView>
       )}

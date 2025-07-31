@@ -26,3 +26,18 @@ export const getJourneyHistoryAsync = async (userId) => {
         return [];
     }
 };
+
+export const deleteJourneyAsync = async (userId, journeyId) => {
+    try {
+        const journeysJSON = await AsyncStorage.getItem('journeys');
+        const journeys = journeysJSON ? JSON.parse(journeysJSON) : {};
+
+        if (!journeys[userId]) return;
+
+        journeys[userId] = journeys[userId].filter(j => j.id !== journeyId);
+        await AsyncStorage.setItem('journeys', JSON.stringify(journeys));
+    } catch (error) {
+        console.error('Error deleting journey:', error);
+        throw error;
+    }
+};

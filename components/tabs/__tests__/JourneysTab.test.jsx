@@ -24,13 +24,25 @@ jest.mock("../../../styles/TabStyles", () => ({
   progressFill: {},
 }));
 
+// Mock useNavigation from react-navigation
+const mockNavigate = jest.fn();
+jest.mock("@react-navigation/native", () => ({
+  useNavigation: () => ({
+    navigate: mockNavigate,
+  }),
+}));
+
 const journeys = [
-  { date: "2025-06-20", score: 90, length: 30 },
-  { date: "2025-04-15", score: 70, length: 45 },
-  { date: "2024-12-01", score: 40, length: 20 },
+  { date: "2025-06-20", scores: { total: 90 }, length: 30 },
+  { date: "2025-04-15", scores: { total: 70 }, length: 45 },
+  { date: "2024-12-01", scores: { total: 40 }, length: 20 },
 ];
 
 describe("JourneysTab", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("renders no journeys message if journeys is empty", () => {
     const { getByText } = render(
       <JourneysTab journeys={[]} filter="all" setFilter={() => {}} />
@@ -67,7 +79,6 @@ describe("JourneysTab", () => {
 
   it("filters journeys by 2mo, 6mo, and all", () => {
     const now = new Date("2025-06-30").getTime();
-    // Mock Date.now()
     jest.spyOn(global.Date, "now").mockImplementation(() => now);
 
     const setFilter = jest.fn();
@@ -77,9 +88,9 @@ describe("JourneysTab", () => {
       <JourneysTab journeys={journeys} filter="2mo" setFilter={setFilter} />
     );
 
-    expect(queryByText("Date: 2025-06-20")).toBeTruthy(); // within 2 mo
-    expect(queryByText("Date: 2025-04-15")).toBeNull(); // 2+ mo ago
-    expect(queryByText("Date: 2024-12-01")).toBeNull();
+    expect(queryByText("2025-06-20")).toBeTruthy();
+    expect(queryByText("2025-04-15")).toBeNull();
+    expect(queryByText("2024-12-01")).toBeNull();
 
     // Filter 6 months
     rerender(
@@ -106,11 +117,11 @@ describe("JourneysTab", () => {
       <JourneysTab journeys={journeys} filter="all" setFilter={setFilter} />
     );
 
-    fireEvent.press(getByText("All ▼")); // open modal
-    fireEvent.press(getByText("2 Months")); // select option
+    fireEvent.press(getByText("All ▼"));
+    fireEvent.press(getByText("2 Months"));
 
     expect(setFilter).toHaveBeenCalledWith("2mo");
-    expect(queryByText("2 Months")).toBeNull(); // modal closed
+    expect(queryByText("2 Months")).toBeNull();
   });
 
   it("applies correct progress bar color based on score", () => {
@@ -118,17 +129,24 @@ describe("JourneysTab", () => {
       <JourneysTab journeys={journeys} filter="all" setFilter={() => {}} />
     );
 
-    // Scores: 90 -> green (#4CAF50), 70 -> amber (#F9A800), 40 -> red (#F44336)
-
     const scoreTexts = getAllByText(/Score: \d+\/100/);
 
     expect(scoreTexts.length).toBe(3);
-
-    // We can't directly check styles easily because of native limitations,
-    // but we can check if score texts exist matching scores.
-
     expect(scoreTexts[0].props.children.join("")).toBe("Score: 90/100");
     expect(scoreTexts[1].props.children.join("")).toBe("Score: 70/100");
     expect(scoreTexts[2].props.children.join("")).toBe("Score: 40/100");
+  });
+
+  it("navigates to Journey screen with correct params when card is pressed", () => {
+    const { getAllByText } = render(
+      <JourneysTab journeys={journeys} filter="all" setFilter={() => {}} />
+    );
+
+    const dateText = getByText("01/12/2024");
+    fireEvent.press(dateText); // The TouchableOpacity wraps the card which contains the date Text
+
+    expect(mockNavigate).toHaveBeenCalledWith("Journey", {
+      journey: journeys[0],
+    });
   });
 });

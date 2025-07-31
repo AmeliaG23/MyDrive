@@ -5,6 +5,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { UserContext } from '../context/UserContext';
 import LoginScreen from '../screens/AuthScreens/LoginScreen';
 import SignupScreen from '../screens/AuthScreens/SignUpScreen';
+import JourneyScreen from '../screens/JourneyScreen'; // import JourneyScreen here
 import TermsOnboardingScreen from '../screens/Onboarding/TermsOnboardingScreen';
 import WelcomeOnboardingScreen from '../screens/Onboarding/WelcomeOnboardingScreen';
 import MainTabNavigator from './MainTabNavigator';
@@ -14,7 +15,7 @@ const Stack = createNativeStackNavigator();
 export default function RootNavigator() {
     const { user, onboarded } = useContext(UserContext);
 
-    // Loading spinner while onboarding status loads
+    // Show loading spinner while onboarding status is being determined
     if (user && onboarded === null) {
         return (
             <View style={styles.loadingContainer}>
@@ -23,24 +24,39 @@ export default function RootNavigator() {
         );
     }
 
+    let screens;
+
+    if (!user) {
+        // User not logged in
+        screens = (
+            <>
+                <Stack.Screen name="Login" component={LoginScreen} />
+                <Stack.Screen name="Signup" component={SignupScreen} />
+            </>
+        );
+    } else if (onboarded === false) {
+        // User logged in but not onboarded
+        screens = (
+            <>
+                <Stack.Screen name="WelcomeOnboarding" component={WelcomeOnboardingScreen} />
+                <Stack.Screen name="TermsOnboarding" component={TermsOnboardingScreen} />
+                <Stack.Screen name="MainTabs" component={MainTabNavigator} />
+                <Stack.Screen name="JourneyScreen" component={JourneyScreen} />
+            </>
+        );
+    } else {
+        // User logged in and onboarded
+        screens = (
+            <>
+                <Stack.Screen name="MainTabs" component={MainTabNavigator} />
+                <Stack.Screen name="JourneyScreen" component={JourneyScreen} />
+            </>
+        );
+    }
+
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {!user ? (
-                <>
-                    <Stack.Screen name="Login" component={LoginScreen} />
-                    <Stack.Screen name="Signup" component={SignupScreen} />
-                </>
-            ) : onboarded === false ? (
-                <>
-                    {/* Start onboarding with Welcome */}
-                    <Stack.Screen name="WelcomeOnboarding" component={WelcomeOnboardingScreen} />
-                    <Stack.Screen name="TermsOnboarding" component={TermsOnboardingScreen} />
-                    {/* MainTabs only reachable after onboarding */}
-                    <Stack.Screen name="MainTabs" component={MainTabNavigator} />
-                </>
-            ) : (
-                <Stack.Screen name="MainTabs" component={MainTabNavigator} />
-            )}
+            {screens}
         </Stack.Navigator>
     );
 }

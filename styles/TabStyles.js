@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -6,7 +6,6 @@ const TabStyles = StyleSheet.create({
     container: {
         paddingVertical: 20,
         paddingHorizontal: 16,
-        backgroundColor: '#f5f7fa',
     },
     title: {
         fontSize: 20,
@@ -32,7 +31,7 @@ const TabStyles = StyleSheet.create({
     },
     cardTitle: {
         flex: 1,
-        marginLeft: 12,
+        marginLeft: 10,
         fontSize: 18,
         fontWeight: '600',
         color: '#444',
@@ -149,6 +148,39 @@ const TabStyles = StyleSheet.create({
         fontSize: 16,
         color: '#777',
         fontStyle: 'italic',
+    },
+    summaryContainer: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        marginTop: 20,
+        paddingVertical: 10,
+        borderTopWidth: 1,
+        borderTopColor: "#ccc",
+        backgroundColor: "#f9f9f9",
+    },
+    summaryCard: {
+        flex: 1,
+        alignItems: "center",
+        marginHorizontal: 5,
+        paddingVertical: 10,
+        backgroundColor: "#fff",
+        borderRadius: 8,
+        shadowColor: "#000",
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        shadowOffset: { width: 0, height: 2 },
+        elevation: 3,
+    },
+    summaryValue: {
+        fontSize: 22,
+        fontWeight: "bold",
+        color: "#008080",
+        marginTop: 5,
+    },
+    summaryLabel: {
+        fontSize: 14,
+        color: "#666",
+        marginTop: 2,
     },
 });
 

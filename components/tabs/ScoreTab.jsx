@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, View, Text } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import TabStyles from "../../styles/TabStyles"; // new styles
 
@@ -33,6 +33,14 @@ const ProgressBar = ({ score }) => (
         { width: `${score}%`, backgroundColor: getScoreColor(score) },
       ]}
     />
+  </View>
+);
+
+const SummaryCard = ({ iconName, label, value }) => (
+  <View style={TabStyles.summaryCard}>
+    <MaterialCommunityIcons name={iconName} size={28} color="#008080" />
+    <Text style={TabStyles.summaryValue}>{value}</Text>
+    <Text style={TabStyles.summaryLabel}>{label}</Text>
   </View>
 );
 
@@ -74,6 +82,17 @@ export default function ScoreTab({ journeys }) {
     averageScores.phoneDistraction / count
   );
   const avgSpeed = Math.round(averageScores.speed / count);
+
+  // Calculate total miles, hours and trips in last 30 days
+  const totalDistanceMiles = recentJourneys.reduce(
+    (acc, journey) => acc + parseFloat(journey.distance || 0),
+    0
+  );
+  const totalTimeHours = recentJourneys.reduce((acc, journey) => {
+    return acc + journey.length / 60; // convert minutes to hours
+  }, 0);
+  const totalTrips = recentJourneys.length;
+
   const ScoreCard = ({ title, score, iconName }) => {
     const warning = getWarningMessage(score, title);
     return (
@@ -91,7 +110,12 @@ export default function ScoreTab({ journeys }) {
         </View>
         <ProgressBar score={score} />
         {warning && (
-          <View style={TabStyles.warningBox} borderColor={getScoreColor(score)}>
+          <View
+            style={[
+              TabStyles.warningBox,
+              { borderColor: getScoreColor(score) },
+            ]}
+          >
             <MaterialCommunityIcons
               name="alert-circle-outline"
               size={20}
@@ -120,6 +144,21 @@ export default function ScoreTab({ journeys }) {
         iconName="cellphone-off"
       />
       <ScoreCard title="Speed" score={avgSpeed} iconName="speedometer" />
+
+      {/* Summary cards container */}
+      <View style={TabStyles.summaryContainer}>
+        <SummaryCard
+          iconName="map-marker-distance"
+          label="Total Miles"
+          value={totalDistanceMiles.toFixed(1)}
+        />
+        <SummaryCard
+          iconName="timer-sand"
+          label="Total Hours"
+          value={totalTimeHours.toFixed(1)}
+        />
+        <SummaryCard iconName="car" label="Trips" value={totalTrips} />
+      </View>
     </ScrollView>
   );
 }

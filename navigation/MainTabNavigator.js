@@ -1,12 +1,12 @@
-import React, { useState, useContext } from 'react';
-import { View, Text, Modal, TouchableOpacity, StyleSheet } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React, { useContext, useState } from 'react';
+import { Modal, Text, TouchableOpacity, View } from 'react-native';
 
-import HomeScreen from '../screens/HomeScreen';
-import JourneyScreen from '../screens/JourneyScreen';
-import ProfileScreen from '../screens/ProfileScreen';
 import { UserContext } from '../context/UserContext';
+import HomeScreen from '../screens/HomeScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import MainTabStyles from '../styles/MainTabStyles'; // <-- import styles here
 
 const Tab = createBottomTabNavigator();
 
@@ -29,9 +29,6 @@ export default function MainTabNavigator() {
                             case 'Home':
                                 iconName = 'home-outline';
                                 break;
-                            case 'Journey':
-                                iconName = 'car-outline';
-                                break;
                             case 'Profile':
                                 iconName = 'person-outline';
                                 break;
@@ -49,7 +46,6 @@ export default function MainTabNavigator() {
                 })}
             >
                 <Tab.Screen name="Home" component={HomeScreen} />
-                <Tab.Screen name="Journey" component={JourneyScreen} />
                 <Tab.Screen name="Profile" component={ProfileScreen} />
                 <Tab.Screen
                     name="Logout"
@@ -70,18 +66,18 @@ export default function MainTabNavigator() {
                 animationType="fade"
                 onRequestClose={() => setLogoutModalVisible(false)}
             >
-                <View style={styles.modalOverlay}>
-                    <View style={styles.modalBox}>
-                        <Text style={styles.modalTitle}>Are you sure you want to log out?</Text>
-                        <View style={styles.modalButtons}>
+                <View style={MainTabStyles.modalOverlay}>
+                    <View style={MainTabStyles.modalBox}>
+                        <Text style={MainTabStyles.modalTitle}>Are you sure you want to log out?</Text>
+                        <View style={MainTabStyles.modalButtons}>
                             <TouchableOpacity
-                                style={[styles.modalButton, { backgroundColor: '#ccc' }]}
+                                style={[MainTabStyles.modalButton, { backgroundColor: '#ccc' }]}
                                 onPress={() => setLogoutModalVisible(false)}
                             >
                                 <Text>Cancel</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                style={[styles.modalButton, { backgroundColor: '#f44336' }]}
+                                style={[MainTabStyles.modalButton, { backgroundColor: '#f44336' }]}
                                 onPress={handleLogout}
                             >
                                 <Text style={{ color: '#fff' }}>Log Out</Text>
@@ -93,34 +89,3 @@ export default function MainTabNavigator() {
         </>
     );
 }
-
-const styles = StyleSheet.create({
-    modalOverlay: {
-        flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.3)',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    modalBox: {
-        width: 300,
-        backgroundColor: '#fff',
-        borderRadius: 10,
-        padding: 20,
-        elevation: 5,
-    },
-    modalTitle: {
-        fontSize: 18,
-        marginBottom: 20,
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
-    modalButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    modalButton: {
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 6,
-    },
-});

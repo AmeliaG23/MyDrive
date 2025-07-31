@@ -50,7 +50,45 @@ const HomeStyles = StyleSheet.create({
         color: '#fff',
         marginBottom: 30,
     },
-
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        padding: 30,
+        width: '90%',
+        maxWidth: 350,
+        alignItems: 'center',
+        elevation: 5,
+    },
+    modalTitle: {
+        fontSize: 22,
+        fontWeight: '700',
+        color: '#008080',
+    },
+    modalText: {
+        fontSize: 16,
+        color: '#333',
+        marginVertical: 8,
+    },
+    modalButton: {
+        marginTop: 20,
+        backgroundColor: '#008080',
+        paddingVertical: 12,
+        paddingHorizontal: 30,
+        borderRadius: 8,
+    },
+    modalButtonText: {
+        color: '#fff',
+        fontWeight: '700',
+        fontSize: 16,
+        textAlign: 'center',
+    },
 });
 
 export default HomeStyles;

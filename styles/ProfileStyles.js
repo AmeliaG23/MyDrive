@@ -63,22 +63,37 @@ const ProfileStyles = StyleSheet.create({
         padding: 25,
         width: '100%',
         maxWidth: 350,
+        position: 'relative',
     },
     modalTitle: {
         fontSize: 20,
         fontWeight: 'bold',
         color: '#008080',
         marginBottom: 10,
+        textAlign: 'center',
     },
     modalText: {
         fontSize: 16,
         color: '#333',
-        marginBottom: 10,
+        marginBottom: 15,
+        textAlign: 'center',
     },
     modalContact: {
         fontSize: 16,
-        color: '#444',
-        marginBottom: 4,
+        color: '#007AFF',
+        marginLeft: 8,
+    },
+    modalContactRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 8,
+    },
+    modalCloseButton: {
+        position: 'absolute',
+        top: 12,
+        right: 12,
+        padding: 8,
+        zIndex: 10,
     },
 });
 

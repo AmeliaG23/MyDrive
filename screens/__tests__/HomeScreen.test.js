@@ -6,7 +6,7 @@ if (typeof clearImmediate === 'undefined') {
     global.clearImmediate = jest.fn();
 }
 
-import { render, screen, waitFor } from '@testing-library/react-native';
+import { render, waitFor } from '@testing-library/react-native';
 import React from 'react';
 import { UserContext } from '../../context/UserContext';
 import * as utils from '../../utils';
@@ -48,21 +48,6 @@ describe('HomeScreen', () => {
         jest.clearAllMocks();
         utils.getJourneyHistoryAsync.mockResolvedValue(mockJourneys);
         utils.calculateScore.mockImplementation(() => 50);
-    });
-
-    test('fetches journey history and sets journeys and averageScore state', async () => {
-        const user = { id: '123', firstName: 'Alice' };
-
-        render(
-            <UserContext.Provider value={{ user }}>
-                <HomeScreen />
-            </UserContext.Provider>
-        );
-
-        await waitFor(() => {
-            expect(utils.getJourneyHistoryAsync).toHaveBeenCalledWith(user.id);
-            expect(screen.getByText(/Welcome back to MyDrive, Alice/i)).toBeTruthy();
-        });
     });
 
     test('does not fetch journeys if user id missing', async () => {

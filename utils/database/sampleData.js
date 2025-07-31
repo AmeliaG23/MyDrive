@@ -15,6 +15,9 @@ const randomDOB = () => {
     return dob.toISOString().split('T')[0];
 };
 
+// Generate unique ID for journeys
+const generateUniqueId = () => Date.now().toString() + Math.random().toString(36).substr(2, 5);
+
 export const addSampleData = async () => {
     let users = await getAllUsers();
     if (!Array.isArray(users)) return;
@@ -67,9 +70,14 @@ export const addSampleData = async () => {
     for (const user of users) {
         const journeys = await getJourneyHistoryAsync(user.id);
         if (!Array.isArray(journeys) || journeys.length === 0) {
+            // 3 journeys within last 30 days
             for (let j = 0; j < 3; j++) {
+                const date = new Date();
+                date.setDate(date.getDate() - Math.floor(Math.random() * 30)); // 0-29 days ago
+
                 const journey = {
-                    date: new Date(Date.now() - j * 86400000).toISOString().split('T')[0],
+                    id: generateUniqueId(),
+                    date: date.toISOString().split('T')[0],
                     length: Math.floor(Math.random() * 60) + 10,
                     distance: Math.floor(Math.random() * 100) + 5,
                     speed: Math.floor(Math.random() * 100),
@@ -81,9 +89,31 @@ export const addSampleData = async () => {
                     roadType: randomFromArray(sampleRoadTypes),
                 };
 
-                const scores = calculateScore(journey);
-                journey.scores = scores;
+                journey.scores = calculateScore(journey);
+                await addJourneyAsync(user.id, journey);
+            }
 
+            // 5 journeys between 30 and ~240 days ago
+            for (let j = 0; j < 5; j++) {
+                const date = new Date();
+                const daysBack = Math.floor(Math.random() * (240 - 30)) + 30; // 30 to 240 days ago
+                date.setDate(date.getDate() - daysBack);
+
+                const journey = {
+                    id: generateUniqueId(),
+                    date: date.toISOString().split('T')[0],
+                    length: Math.floor(Math.random() * 60) + 10,
+                    distance: Math.floor(Math.random() * 100) + 5,
+                    speed: Math.floor(Math.random() * 100),
+                    brakingAcceleration: +(Math.random() * 5).toFixed(2),
+                    cornering: +(Math.random() * 4).toFixed(2),
+                    journeyRoute: randomFromArray(sampleRoutes),
+                    phoneUsage: Math.random() < 0.5,
+                    phoneCallStatus: Math.random() < 0.3,
+                    roadType: randomFromArray(sampleRoadTypes),
+                };
+
+                journey.scores = calculateScore(journey);
                 await addJourneyAsync(user.id, journey);
             }
         }
