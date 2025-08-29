@@ -95,6 +95,10 @@ const ProfileStyles = StyleSheet.create({
         padding: 8,
         zIndex: 10,
     },
+    modalCloseIcon: {
+        color: '#008080',
+        fontSize: 24,
+    },
 });
 
 export default ProfileStyles;

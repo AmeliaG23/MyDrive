@@ -119,3 +119,13 @@ export const addSampleData = async () => {
         }
     }
 };
+
+// Returns true if seeded test users already exist
+export const testUsersExist = async () => {
+    const users = await getAllUsers();
+    if (!Array.isArray(users) || users.length === 0) return false;
+
+    // Check if any of your known test usernames are present
+    return users.some(u => u.username && u.username.startsWith("user"));
+};
+

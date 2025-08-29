@@ -34,7 +34,6 @@ function ScoreBreakdown({ scores }) {
         <View style={JourneyStyles.breakdownContainer}>
             {Object.entries(scores).map(([key, value]) => {
                 if (key === 'total') return null;
-
                 return (
                     <View key={key} style={JourneyStyles.breakdownRow}>
                         <Text style={JourneyStyles.breakdownLabel}>{formatLabel(key)}</Text>
@@ -42,10 +41,7 @@ function ScoreBreakdown({ scores }) {
                             <View
                                 style={[
                                     JourneyStyles.progressFill,
-                                    {
-                                        width: `${value}%`,
-                                        backgroundColor: getScoreColor(value),
-                                    },
+                                    { width: `${value}%`, backgroundColor: getScoreColor(value) },
                                 ]}
                             />
                         </View>
@@ -75,18 +71,8 @@ export default function JourneyScreen({ route, navigation }) {
 
     const handlePassengerPress = () => {
         setWasPassenger(null);
-        setConfirmDeleteVisible(false);
         setPassengerModalVisible(true);
-    };
-
-    const handleConfirmPassenger = () => {
-        if (wasPassenger === true) {
-            setConfirmDeleteVisible(true);
-        } else if (wasPassenger === false) {
-            setPassengerModalVisible(false);
-        } else {
-            Alert.alert('Please select an option');
-        }
+        setConfirmDeleteVisible(false);
     };
 
     const handleDeleteJourney = async () => {
@@ -95,7 +81,6 @@ export default function JourneyScreen({ route, navigation }) {
             setConfirmDeleteVisible(false);
             setPassengerModalVisible(false);
             Alert.alert('Journey deleted', 'This journey has been removed.');
-
             navigation.dispatch(
                 CommonActions.reset({
                     index: 0,
@@ -111,7 +96,11 @@ export default function JourneyScreen({ route, navigation }) {
         <View style={JourneyStyles.screenWrapper}>
             {/* Header */}
             <View style={JourneyStyles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={JourneyStyles.backButton}>
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={JourneyStyles.backButton}
+                    testID="backButton"
+                >
                     <MaterialCommunityIcons name="arrow-left" size={28} color="white" />
                 </TouchableOpacity>
             </View>
@@ -124,9 +113,7 @@ export default function JourneyScreen({ route, navigation }) {
 
                 <DoughnutChart score={journey.scores?.total ?? 0} />
 
-                {/* Distance and Time cards side by side */}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 16 }}>
-                    {/* Distance card */}
                     <View style={[JourneyStyles.card, { flex: 1, marginRight: 8 }]}>
                         <View style={JourneyStyles.cardHeader}>
                             <MaterialCommunityIcons name="map-marker-distance" size={24} color="#008080" />
@@ -137,7 +124,6 @@ export default function JourneyScreen({ route, navigation }) {
                         </Text>
                     </View>
 
-                    {/* Time of Journey card */}
                     <View style={[JourneyStyles.card, { flex: 1, marginLeft: 8 }]}>
                         <View style={JourneyStyles.cardHeader}>
                             <MaterialCommunityIcons name="clock-outline" size={24} color="#008080" />
@@ -170,66 +156,66 @@ export default function JourneyScreen({ route, navigation }) {
                 </ScrollView>
             </View>
 
-            {/* Modal */}
+            {/* Passenger Modal */}
             <Modal
                 visible={passengerModalVisible}
                 transparent
                 animationType="fade"
-                onRequestClose={() => {
-                    setPassengerModalVisible(false);
-                    setConfirmDeleteVisible(false);
-                }}
+                onRequestClose={() => setPassengerModalVisible(false)}
             >
                 <View style={JourneyStyles.modalOverlay}>
                     <View style={JourneyStyles.modalContent}>
-                        {!confirmDeleteVisible ? (
-                            <>
-                                <Text style={JourneyStyles.modalTitle}>Were you a passenger on this journey?</Text>
-                                <View style={JourneyStyles.modalButtons}>
-                                    <TouchableOpacity
-                                        style={[
-                                            JourneyStyles.inlineButton,
-                                            wasPassenger === true && JourneyStyles.inlineButtonActive,
-                                        ]}
-                                        onPress={() => setWasPassenger(true)}
-                                    >
-                                        <Text style={JourneyStyles.inlineButtonText}>Yes</Text>
-                                    </TouchableOpacity>
+                        <Text style={JourneyStyles.modalTitle}>
+                            Were you a passenger on this journey?
+                        </Text>
+                        <View style={JourneyStyles.modalButtons}>
+                            <TouchableOpacity
+                                style={JourneyStyles.inlineButton}
+                                onPress={() => {
+                                    setWasPassenger(true);
+                                    setPassengerModalVisible(false);
+                                    setConfirmDeleteVisible(true);
+                                }}
+                            >
+                                <Text style={JourneyStyles.inlineButtonText}>Yes</Text>
+                            </TouchableOpacity>
 
-                                    <TouchableOpacity
-                                        style={[
-                                            JourneyStyles.inlineButton,
-                                            wasPassenger === false && JourneyStyles.inlineButtonActive,
-                                        ]}
-                                        onPress={() => setWasPassenger(false)}
-                                    >
-                                        <Text style={JourneyStyles.inlineButtonText}>No</Text>
-                                    </TouchableOpacity>
-                                </View>
-                                <Pressable style={JourneyStyles.modalConfirm} onPress={handleConfirmPassenger}>
-                                    <Text style={JourneyStyles.modalConfirmText}>Confirm</Text>
-                                </Pressable>
-                                <Pressable
-                                    style={JourneyStyles.cancelButton}
-                                    onPress={() => setPassengerModalVisible(false)}
-                                >
-                                    <Text style={JourneyStyles.cancelButtonText}>Cancel</Text>
-                                </Pressable>
-                            </>
-                        ) : (
-                            <>
-                                <Text style={JourneyStyles.modalTitle}>Are you sure you want to delete this journey?</Text>
-                                <Pressable style={JourneyStyles.modalConfirm} onPress={handleDeleteJourney}>
-                                    <Text style={JourneyStyles.modalConfirmText}>Delete Journey</Text>
-                                </Pressable>
-                                <Pressable
-                                    style={JourneyStyles.cancelButton}
-                                    onPress={() => setConfirmDeleteVisible(false)}
-                                >
-                                    <Text style={JourneyStyles.cancelButtonText}>Cancel</Text>
-                                </Pressable>
-                            </>
-                        )}
+                            <TouchableOpacity
+                                style={JourneyStyles.inlineButton}
+                                onPress={() => {
+                                    setWasPassenger(false);
+                                    setPassengerModalVisible(false);
+                                }}
+                            >
+                                <Text style={JourneyStyles.inlineButtonText}>No</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
+            {/* Confirm Delete Modal */}
+            <Modal
+                visible={confirmDeleteVisible}
+                transparent
+                animationType="fade"
+                onRequestClose={() => setConfirmDeleteVisible(false)}
+                testID="confirmDeleteModal"
+            >
+                <View style={JourneyStyles.modalOverlay}>
+                    <View style={JourneyStyles.modalContent}>
+                        <Text style={JourneyStyles.modalTitle}>
+                            Are you sure you want to delete this journey?
+                        </Text>
+                        <Pressable style={JourneyStyles.modalConfirm} onPress={handleDeleteJourney}>
+                            <Text style={JourneyStyles.modalConfirmText}>Delete Journey</Text>
+                        </Pressable>
+                        <Pressable
+                            style={JourneyStyles.cancelButton}
+                            onPress={() => setConfirmDeleteVisible(false)}
+                        >
+                            <Text style={JourneyStyles.cancelButtonText}>Cancel</Text>
+                        </Pressable>
                     </View>
                 </View>
             </Modal>

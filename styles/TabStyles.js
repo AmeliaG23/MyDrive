@@ -182,6 +182,16 @@ const TabStyles = StyleSheet.create({
         color: "#666",
         marginTop: 2,
     },
+    closeButtonContainer: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        zIndex: 10,
+    },
+    closeButtonIcon: {
+        color: '#008080',
+        fontSize: 24,
+    },
 });
 
 export default TabStyles;

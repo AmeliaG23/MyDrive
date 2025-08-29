@@ -1,30 +1,60 @@
-// setup.js
-import { jest } from '@jest/globals'; // Add this if using ESM
+// jest/setup.js
+import { jest } from '@jest/globals';
 import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 import { LogBox } from 'react-native';
 
+// Use fake timers globally
 jest.useFakeTimers();
 
-// ✅ Mock AsyncStorage
+// --------------------
+// Mock AsyncStorage
+// --------------------
 jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
 
-// ✅ Prevent loading `expo` native runtime
-jest.mock('expo', () => ({}));
+// --------------------
+// Silence warnings
+// --------------------
+LogBox.ignoreLogs([
+    'An update to Icon inside a test was not wrapped in act(...)',
+]);
 
-// ✅ Mock react-native-svg for charts or icons
+process.removeAllListeners('warning');
+
+// --------------------
+// Mock react-native-svg
+// --------------------
 jest.mock('react-native-svg', () => {
     const React = require('react');
     const { View } = require('react-native');
 
+    const Mock = (props) => React.createElement(View, props, props.children);
+
     return {
-        Svg: (props) => React.createElement(View, props, props.children),
-        Circle: (props) => React.createElement(View, props),
-        G: (props) => React.createElement(View, props, props.children),
-        // Add others if needed
+        __esModule: true,
+        default: Mock,
+        Svg: Mock,
+        G: Mock,
+        Circle: Mock,
+        Path: Mock,
+        Rect: Mock,
+        Line: Mock,
+        Polygon: Mock,
     };
 });
 
-// ✅ Mock material-top-tabs navigator
+// --------------------
+// Mock React Navigation
+// --------------------
+jest.mock('@react-navigation/native', () => ({
+    useNavigation: () => ({
+        setOptions: jest.fn(),
+        navigate: jest.fn(),
+        goBack: jest.fn(),
+        reset: jest.fn(),
+    }),
+    useRoute: () => ({ params: {} }),
+}));
+
 jest.mock('@react-navigation/material-top-tabs', () => ({
     createMaterialTopTabNavigator: () => ({
         Navigator: ({ children }) => <>{children}</>,
@@ -32,25 +62,44 @@ jest.mock('@react-navigation/material-top-tabs', () => ({
     }),
 }));
 
-// ✅ Mock navigation hooks
-jest.mock('@react-navigation/native', () => ({
-    useNavigation: () => ({
-        setOptions: jest.fn(),
-        navigate: jest.fn(),
-        goBack: jest.fn(),
-    }),
-    useRoute: () => ({
-        params: {},
-    }),
+// --------------------
+// Mock Expo modules
+// --------------------
+jest.mock('expo', () => ({}));
+
+jest.mock('expo-location', () => ({
+    Accuracy: { Highest: 0 },
+    requestForegroundPermissionsAsync: jest.fn(),
+    requestBackgroundPermissionsAsync: jest.fn(),
+    startLocationUpdatesAsync: jest.fn(),
+    stopLocationUpdatesAsync: jest.fn(),
 }));
 
-// ✅ Silence noisy warnings from vector-icons during test
-LogBox.ignoreLogs([
-    'An update to Icon inside a test was not wrapped in act(...)',
-]);
+jest.mock('expo-task-manager', () => ({
+    defineTask: jest.fn(),
+}));
 
-// // ✅ Suppress deprecated prop-types warning (common in RN libraries)
-// jest.mock('deprecated-react-native-prop-types', () => require('react-native'));
+jest.mock('expo-sensors', () => ({
+    Accelerometer: {
+        setUpdateInterval: jest.fn(),
+        addListener: jest.fn(() => ({ remove: jest.fn() })),
+        removeAllListeners: jest.fn(),
+    },
+    Gyroscope: {
+        setUpdateInterval: jest.fn(),
+        addListener: jest.fn(() => ({ remove: jest.fn() })),
+        removeAllListeners: jest.fn(),
+    },
+}));
 
-// ✅ Suppress all process warnings (e.g., punycode)
-process.removeAllListeners('warning');
+// --------------------
+// Mock other native modules if needed
+// --------------------
+jest.mock('react-native-call-detection', () => {
+    return jest.fn().mockImplementation(() => ({
+        startListener: jest.fn(),
+        stopListener: jest.fn(),
+        dispose: jest.fn(),
+    }));
+});
+

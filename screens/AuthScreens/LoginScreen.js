@@ -36,7 +36,6 @@ export default function LoginScreen({ navigation, skipLoginDelay = false }) {
             const users = await getAllUsers();
 
             if (!users) {
-                console.error('No users found or database error');
                 Alert.alert('Error', 'Unable to fetch users.');
                 setLoading(false);
                 return;

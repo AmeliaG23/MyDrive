@@ -1,11 +1,12 @@
+import { formatDate } from "@/utils";
 import { fireEvent, render, waitFor } from "@testing-library/react-native";
 import React from "react";
-import JourneysTab from "../JourneysTab"; // adjust import path
+import JourneysTab from "../JourneysTab";
 
-// Mock MaterialCommunityIcons to avoid native errors
+// Mock MaterialCommunityIcons
 jest.mock("react-native-vector-icons/MaterialCommunityIcons", () => "Icon");
 
-// Mock TabStyles to prevent style errors
+// Mock styles
 jest.mock("../../../styles/TabStyles", () => ({
   dropdownHeader: {},
   dropdownButton: {},
@@ -24,12 +25,10 @@ jest.mock("../../../styles/TabStyles", () => ({
   progressFill: {},
 }));
 
-// Mock useNavigation from react-navigation
+// Mock navigation
 const mockNavigate = jest.fn();
 jest.mock("@react-navigation/native", () => ({
-  useNavigation: () => ({
-    navigate: mockNavigate,
-  }),
+  useNavigation: () => ({ navigate: mockNavigate }),
 }));
 
 const journeys = [
@@ -39,9 +38,7 @@ const journeys = [
 ];
 
 describe("JourneysTab", () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  afterEach(() => jest.clearAllMocks());
 
   it("renders no journeys message if journeys is empty", () => {
     const { getByText } = render(
@@ -70,43 +67,42 @@ describe("JourneysTab", () => {
     fireEvent.press(getByText("All ▼"));
     expect(queryByText("2 Months")).toBeTruthy();
 
-    // Press outside modal to close
+    // Close modal
     fireEvent.press(queryByText("2 Months").parent);
     await waitFor(() => {
       expect(queryByText("2 Months")).toBeNull();
     });
   });
 
-  it("filters journeys by 2mo, 6mo, and all", () => {
+  it("filters journeys by 2mo, 6mo, and all correctly", () => {
     const now = new Date("2025-06-30").getTime();
     jest.spyOn(global.Date, "now").mockImplementation(() => now);
 
     const setFilter = jest.fn();
-
-    // Filter 2 months: only journeys within last 60 days
     const { queryByText, rerender } = render(
       <JourneysTab journeys={journeys} filter="2mo" setFilter={setFilter} />
     );
 
-    expect(queryByText("2025-06-20")).toBeTruthy();
-    expect(queryByText("2025-04-15")).toBeNull();
-    expect(queryByText("2024-12-01")).toBeNull();
+    // Filter 2 months
+    expect(queryByText(formatDate("2025-06-20"))).toBeTruthy();
+    expect(queryByText(formatDate("2025-04-15"))).toBeNull();
+    expect(queryByText(formatDate("2024-12-01"))).toBeNull();
 
     // Filter 6 months
     rerender(
       <JourneysTab journeys={journeys} filter="6mo" setFilter={setFilter} />
     );
-    expect(queryByText("Date: 2025-06-20")).toBeTruthy();
-    expect(queryByText("Date: 2025-04-15")).toBeTruthy();
-    expect(queryByText("Date: 2024-12-01")).toBeNull();
+    expect(queryByText(formatDate("2025-06-20"))).toBeTruthy();
+    expect(queryByText(formatDate("2025-04-15"))).toBeTruthy();
+    expect(queryByText(formatDate("2024-12-01"))).toBeNull();
 
     // Filter all
     rerender(
       <JourneysTab journeys={journeys} filter="all" setFilter={setFilter} />
     );
-    expect(queryByText("Date: 2025-06-20")).toBeTruthy();
-    expect(queryByText("Date: 2025-04-15")).toBeTruthy();
-    expect(queryByText("Date: 2024-12-01")).toBeTruthy();
+    expect(queryByText(formatDate("2025-06-20"))).toBeTruthy();
+    expect(queryByText(formatDate("2025-04-15"))).toBeTruthy();
+    expect(queryByText(formatDate("2024-12-01"))).toBeTruthy();
 
     global.Date.now.mockRestore();
   });
@@ -137,16 +133,16 @@ describe("JourneysTab", () => {
     expect(scoreTexts[2].props.children.join("")).toBe("Score: 40/100");
   });
 
-  it("navigates to Journey screen with correct params when card is pressed", () => {
-    const { getAllByText } = render(
+  it("navigates to JourneyScreen with correct params when card is pressed", () => {
+    const { getByText } = render(
       <JourneysTab journeys={journeys} filter="all" setFilter={() => {}} />
     );
 
-    const dateText = getByText("01/12/2024");
-    fireEvent.press(dateText); // The TouchableOpacity wraps the card which contains the date Text
+    const dateText = getByText(formatDate("2024-12-01"));
+    fireEvent.press(dateText.parent);
 
-    expect(mockNavigate).toHaveBeenCalledWith("Journey", {
-      journey: journeys[0],
+    expect(mockNavigate).toHaveBeenCalledWith("JourneyScreen", {
+      journey: journeys[2],
     });
   });
 });

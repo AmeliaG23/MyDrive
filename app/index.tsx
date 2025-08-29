@@ -1,63 +1,84 @@
-import React from "react";
+import React, { useEffect /*, useContext */ } from "react";
 import { StatusBar, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { UserProvider } from "../context/UserContext";
+import { UserProvider /*, UserContext */ } from "../context/UserContext";
 import RootNavigator from "../navigation/RootNavigator";
 
-// // Component responsible for managing location & driving tracking lifecycle
-// function TrackingManager() {
-//   // Get current user info from context
-//   const { user } = useContext(UserContext);
+// Import your sample data helpers
+import { addSampleData, testUsersExist } from "../utils/database";
 
-//   useEffect(() => {
-//     // If no logged-in user, warn and skip tracking
-//     if (!user?.username) {
-//       console.warn("No user logged in, tracking will not start");
-//       return;
-//     }
+// NOTE: Tracking code is commented out because it won't work in Expo Go.
+// Uncomment when using a physical device with a custom dev build or production build.
+// import { startTracking, stopTracking } from "../utils/tracking";
 
-//     let isMounted = true; // flag to prevent state updates after unmount
+/* -------------------------------------------------------------------------- */
+/* TrackingManager: manages background location tracking for logged-in users. */
+/* Uncomment this block when running on a physical device outside Expo Go.    */
+/*
+function TrackingManager() {
+  // Get current user info from context
+  const { user } = useContext(UserContext);
 
-//     (async () => {
-//       try {
-//         // Start tracking with the user's username as an identifier
-//         await startTracking(user.username);
-//       } catch (e) {
-//         // Log any error starting the tracking service
-//         console.error("Failed to start tracking:", e);
-//       }
-//     })();
+  useEffect(() => {
+    if (!user?.username) {
+      console.warn("No user logged in, tracking will not start");
+      return;
+    }
 
-//     // Cleanup function on component unmount or username change
-//     return () => {
-//       if (isMounted) {
-//         // Stop tracking when component unmounts or user changes
-//         stopTracking(user.username);
-//       }
-//       isMounted = false;
-//     };
-//   }, [user?.username]); // Effect re-runs only when username changes
+    let isMounted = true;
 
-//   // This component renders nothing visible
-//   return null;
-// }
+    (async () => {
+      try {
+        await startTracking(user.username);
+      } catch (e) {
+        console.error("Failed to start tracking:", e);
+      }
+    })();
 
-// Main app component wraps app in providers and renders navigation + tracking manager
+    return () => {
+      if (isMounted) {
+        stopTracking(user.username);
+      }
+      isMounted = false;
+    };
+  }, [user?.username]);
+
+  return null;
+}
+*/
+
 export default function App() {
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const exists = await testUsersExist();
+        if (!exists) {
+          await addSampleData();
+        } else {
+        }
+      } catch (err) {
+        console.error("Error initializing sample data:", err);
+      }
+    };
+
+    init();
+  }, []);
+
   return (
     <UserProvider>
       <SafeAreaProvider>
-        {/* Root container view */}
         <View style={{ flex: 1, backgroundColor: "#008080" }}>
-          {/* Configure status bar appearance */}
           <StatusBar
             translucent
             backgroundColor="transparent"
             barStyle="light-content"
           />
-          {/* Render the main app navigation */}
           <RootNavigator />
-          {/* Initialize and manage tracking lifecycle */}
+          {/* 
+            Initialize and manage tracking lifecycle. 
+            NOTE: Uncomment <TrackingManager /> when running on a physical device 
+            with a custom dev client or production build.
+          */}
           {/* <TrackingManager /> */}
         </View>
       </SafeAreaProvider>

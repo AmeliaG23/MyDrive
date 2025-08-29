@@ -60,12 +60,20 @@ export default function JourneysTab({ journeys, filter, setFilter }) {
         animationType="fade"
         onRequestClose={() => setDropdownVisible(false)}
       >
-        <TouchableOpacity
-          style={TabStyles.modalOverlay}
-          activeOpacity={1}
-          onPressOut={() => setDropdownVisible(false)}
-        >
+        <View style={TabStyles.modalOverlay}>
           <View style={TabStyles.modalContent}>
+            {/* Close Button */}
+            <TouchableOpacity
+              style={TabStyles.closeButtonContainer}
+              onPress={() => setDropdownVisible(false)}
+            >
+              <MaterialCommunityIcons
+                name="close"
+                style={TabStyles.closeButtonIcon}
+              />
+            </TouchableOpacity>
+
+            {/* Options List */}
             <FlatList
               data={DROPDOWN_OPTIONS}
               keyExtractor={(item) => item.key}
@@ -89,10 +97,10 @@ export default function JourneysTab({ journeys, filter, setFilter }) {
               )}
             />
           </View>
-        </TouchableOpacity>
+        </View>
       </Modal>
 
-      {/* No journeys message outside ScrollView */}
+      {/* No journeys message */}
       {filteredJourneys.length === 0 ? (
         <View style={TabStyles.noDataContainer}>
           <Text style={TabStyles.noDataText}>No journeys recorded yet.</Text>
@@ -125,7 +133,7 @@ export default function JourneysTab({ journeys, filter, setFilter }) {
                 <Text style={TabStyles.cardTitle}>{formatDate(j.date)}</Text>
               </View>
 
-              {/* Score progress bar, only if score exists */}
+              {/* Score progress bar */}
               {j.scores?.total !== undefined && (
                 <View style={{ marginVertical: 6 }}>
                   <Text style={{ marginBottom: 4, fontWeight: "600" }}>
