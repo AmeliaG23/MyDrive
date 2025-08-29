@@ -170,10 +170,6 @@ npm test -- --coverage
 
 This will output a coverage summary in the console and a detailed report inside the coverage/ folder (including an interactive HTML version you can open in a browser).
 
-**Author:** Amelia Goldsby
-**Degree:** Level 6 QA - Major Project - A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
-**Date:** 03/10/2025
-
 ## Acknowledgements
 
 This project was developed as part of the **Major Project (Level 6)** module with QA Higher Education.
@@ -183,3 +179,9 @@ I would like to acknowledge the following:
 - **QA Tutors & Supervisors** – for their guidance, feedback, and support throughout the project.
 - **Expo & React Native Communities** – for providing extensive documentation, open-source libraries, and forums that helped in solving development challenges.
 - **Third-Party Libraries** used in the project (React Navigation, Recharts, Safe Area Context, etc.) that enabled rapid development.
+
+**Author:** Amelia Goldsby
+
+**Degree:** Level 6 QA - Major Project - A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+
+**Date:** 03/10/2025
