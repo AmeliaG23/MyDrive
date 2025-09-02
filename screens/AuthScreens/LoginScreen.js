@@ -8,7 +8,7 @@
  *
  * Purpose:
  *    Allows users to sign in before accessing the Home Screen.
- *    Implements a 3 secon delay before navigation.
+ *    Implements a 3 second delay before navigation.
  *
  * (Rani et al., 2021)
  */
