@@ -1,4 +1,18 @@
-import { getRoadType, normalizeRoadType } from './roadTypeService';
+/**
+ * roadTypeService.test.js
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Functional tests for roadTypeService.js
+ *
+ * (Rani et al., 2021)
+ */
+
+import { getRoadType, normalizeRoadType } from '../roadTypeService';
 
 global.fetch = jest.fn();
 

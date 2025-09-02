@@ -1,3 +1,17 @@
+/**
+ * UserContext.test.jsx
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Functional tests for UserContext.jsx
+ *
+ * (Rani et al., 2021)
+ */
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { act, render } from '@testing-library/react-native';
 import React from 'react';
@@ -17,8 +31,8 @@ describe('UserContext', () => {
         const testUser = { username: 'testuser' };
 
         AsyncStorage.getItem
-            .mockResolvedValueOnce('true')  // onboarded_testuser
-            .mockResolvedValueOnce('false'); // locationPermissionGranted_testuser
+            .mockResolvedValueOnce('true')
+            .mockResolvedValueOnce('false');
 
         let contextValue;
         render(
@@ -154,6 +168,6 @@ describe('UserContext', () => {
             await contextValue.login(testUser);
         });
 
-        expect(contextValue.onboarded).toBe(false); // default fallback
+        expect(contextValue.onboarded).toBe(false);
     });
 });

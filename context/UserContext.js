@@ -1,3 +1,17 @@
+/**
+ * UserContext.jsx
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Provides global state management for user's sessions
+ *
+ * (Rani et al., 2021)
+ */
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useState } from 'react';
 

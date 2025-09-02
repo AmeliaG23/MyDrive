@@ -1,4 +1,19 @@
-// jest/setup.js
+/**
+ * setup.js
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Set up file for global mocks for all tests
+ *    Defines global mocks for React Native, Expo, and navigation modules 
+ *    Reduces noise from warnings and simulates native APIs
+ *
+ * (Rani et al., 2021)
+ */
+
 import { jest } from '@jest/globals';
 import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 import { LogBox } from 'react-native';
@@ -103,3 +118,4 @@ jest.mock('react-native-call-detection', () => {
     }));
 });
 
+//(Badwaik, 2024)

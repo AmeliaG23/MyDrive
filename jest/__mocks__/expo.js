@@ -1,4 +1,16 @@
-// __mocks__/expo.js
+/**
+ * expo.js
+ * ----------------
+ * Created: 20-08-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Expo mocks to help with scoring architecture tests
+ *
+ * (Rani et al., 2021)
+ */
 
 // Mock Expo Location
 const locationMock = {

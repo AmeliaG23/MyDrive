@@ -1,4 +1,3 @@
-// jest.config.cjs
 module.exports = {
     preset: 'jest-expo',
     testEnvironment: 'node',
@@ -15,7 +14,6 @@ module.exports = {
         '|victory-native)',
     ],
     moduleNameMapper: {
-        '^expo$': '<rootDir>/jest/__mocks__/expoMock.js',
         '^@react-navigation/native$': '<rootDir>/jest/__mocks__/react-navigation-native.js', // added line
     },
 };
