@@ -1,12 +1,25 @@
+/**
+ * sampleData.js
+ * ----------------
+ * Created: 20-08-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Generate sample data for database and to demonstrate and test functions.
+ *
+ * (Rani et al., 2021)
+ */
+
 import { addJourneyAsync, getJourneyHistoryAsync } from './journeys';
 import { calculateScore } from './scoring';
 import { addUserAsync, getAllUsers, overwriteUsersAsync } from './users';
 
+// Sample data for sample users
 const randomFromArray = (arr) => arr[Math.floor(Math.random() * arr.length)];
-
 const sampleFirstNames = ['Alice', 'Bob', 'Charlie', 'Diana', 'Evan', 'Fiona', 'George', 'Hannah', 'Ian', 'Julia'];
 const sampleLastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis', 'Martinez', 'Taylor'];
-
 const randomDOB = () => {
     const start = new Date(1970, 0, 1).getTime();
     const end = new Date(2000, 11, 31).getTime();
@@ -18,10 +31,13 @@ const randomDOB = () => {
 // Generate unique ID for journeys
 const generateUniqueId = () => Date.now().toString() + Math.random().toString(36).substr(2, 5);
 
+// Function to add sample data to database
+//  - 10 sample users with journey data
 export const addSampleData = async () => {
     let users = await getAllUsers();
     if (!Array.isArray(users)) return;
 
+    // Updates sample user data if missing
     if (users.length > 0) {
         let updated = false;
         for (let i = 0; i < users.length && i < 10; i++) {
@@ -47,6 +63,7 @@ export const addSampleData = async () => {
 
     const existingUsernames = users.map(u => u.username);
 
+    // Ensure there are at least 10 sample users
     for (let i = 1; i <= 10; i++) {
         const username = `user${i}`;
         if (!existingUsernames.includes(username)) {
@@ -64,13 +81,14 @@ export const addSampleData = async () => {
     users = await getAllUsers();
     if (!Array.isArray(users)) return;
 
+    // Sample journey routes and road types
     const sampleRoadTypes = ['city', 'rural', 'highway'];
     const sampleRoutes = [['start', 'mid1', 'mid2', 'end'], ['A', 'B', 'C', 'D'], ['X', 'Y', 'Z']];
 
     for (const user of users) {
         const journeys = await getJourneyHistoryAsync(user.id);
         if (!Array.isArray(journeys) || journeys.length === 0) {
-            // 3 journeys within last 30 days
+            // Ensures there are 3 journeys within last 30 days
             for (let j = 0; j < 3; j++) {
                 const date = new Date();
                 date.setDate(date.getDate() - Math.floor(Math.random() * 30)); // 0-29 days ago
@@ -89,6 +107,7 @@ export const addSampleData = async () => {
                     roadType: randomFromArray(sampleRoadTypes),
                 };
 
+                // Calculates scores for sample journeys
                 journey.scores = calculateScore(journey);
                 await addJourneyAsync(user.id, journey);
             }
@@ -125,7 +144,7 @@ export const testUsersExist = async () => {
     const users = await getAllUsers();
     if (!Array.isArray(users) || users.length === 0) return false;
 
-    // Check if any of your known test usernames are present
+    // Checks if users are already present
     return users.some(u => u.username && u.username.startsWith("user"));
 };
 

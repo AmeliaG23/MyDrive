@@ -1,3 +1,17 @@
+/**
+ * JourneyStyles.js
+ * ----------------
+ * Created: 29-08-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Stylesheet for the Journey Screen
+ *
+ * (Rani et al., 2021)
+ */
+
 import { StyleSheet } from 'react-native';
 
 const JourneyStyles = StyleSheet.create({

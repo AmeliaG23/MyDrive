@@ -1,21 +1,32 @@
-import { calculateScore, get30DayAverageScore } from '../scoring'; // adjust path as needed
+/**
+ * scoring.test.js
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Functional tests for scoring.js
+ *
+ * (Rani et al., 2021)
+ */
+
+import { calculateScore, get30DayAverageScore } from '../scoring';
 
 describe('calculateScore', () => {
     test('calculates a perfect score for ideal journey', () => {
         const journey = {
-            brakingAcceleration: 0, // ideal
-            cornering: 0,           // ideal
+            brakingAcceleration: 0,
+            cornering: 0,
             speed: 50,              // below penalty threshold
             phoneUsage: false,
             phoneCallStatus: false,
-            roadType: 'highway',    // weight 1
+            roadType: 'highway',
         };
 
         const result = calculateScore(journey);
 
-        // According to your formula, braking and cornering scores become 0
-        // because normalize returns 100 and you subtract 5*100*weight from 100 => negative, clamped to 0
-        // speed and phoneDistraction scores remain 100
         expect(result.total).toBe(45);         // (0*0.3 + 0*0.25 + 100*0.25 + 100*0.2) = 45
         expect(result.braking).toBe(0);
         expect(result.cornering).toBe(0);
@@ -30,7 +41,7 @@ describe('calculateScore', () => {
             speed: 50,
             phoneUsage: true,
             phoneCallStatus: true,
-            roadType: 'city',  // weight 1.2
+            roadType: 'city',
         };
 
         const result = calculateScore(journey);
@@ -106,7 +117,7 @@ describe('get30DayAverageScore', () => {
     test('returns 35 if one journey is missing scores', () => {
         const journeys = [
             { date: new Date(now).toISOString(), scores: { total: 70 } },
-            { date: new Date(now).toISOString() },  // missing scores
+            { date: new Date(now).toISOString() },
         ];
 
         const result = get30DayAverageScore(journeys);

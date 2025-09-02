@@ -1,4 +1,17 @@
-// styles/ChartStyles.js
+/**
+ * ChartStyles.js
+ * ----------------
+ * Created: 29-08-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Stylesheet for the Doughnut Chart
+ *
+ * (Rani et al., 2021)
+ */
+
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
@@ -10,7 +23,7 @@ export default StyleSheet.create({
     },
     gauge: {
         position: "absolute",
-        top: "40%", // center it better vertically
+        top: "40%",
         left: 0,
         right: 0,
         alignItems: "center",

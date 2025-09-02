@@ -1,3 +1,17 @@
+/**
+ * sampleData.test.js
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Functional tests for sampleData.js
+ *
+ * (Rani et al., 2021)
+ */
+
 import { addJourneyAsync, getJourneyHistoryAsync } from '../journeys';
 import { addSampleData } from '../sampleData';
 import { calculateScore } from '../scoring';
@@ -14,7 +28,7 @@ describe('addSampleData', () => {
 
     it('updates users missing firstName, lastName, or dob and calls overwriteUsersAsync', async () => {
         const usersWithMissingData = [
-            { id: '1', username: 'user1', password: 'pass' }, // missing names & dob
+            { id: '1', username: 'user1', password: 'pass' },
             { id: '2', username: 'user2', password: 'pass', firstName: 'Test', lastName: 'User', dob: null },
         ];
 
@@ -26,9 +40,9 @@ describe('addSampleData', () => {
         }));
 
         getAllUsers
-            .mockResolvedValueOnce(usersWithMissingData) // initial load
-            .mockResolvedValueOnce(updatedUsers)         // after possible update
-            .mockResolvedValueOnce(updatedUsers);        // before journey generation
+            .mockResolvedValueOnce(usersWithMissingData)
+            .mockResolvedValueOnce(updatedUsers)
+            .mockResolvedValueOnce(updatedUsers);
 
         getJourneyHistoryAsync.mockResolvedValue([]);
 
@@ -52,16 +66,16 @@ describe('addSampleData', () => {
         }));
 
         getAllUsers
-            .mockResolvedValueOnce(existingUsers) // first check
-            .mockResolvedValueOnce(existingUsers) // after update
-            .mockResolvedValueOnce(afterAddingUsers) // after adding users
-            .mockResolvedValueOnce(afterAddingUsers); // before journey generation
+            .mockResolvedValueOnce(existingUsers)
+            .mockResolvedValueOnce(existingUsers)
+            .mockResolvedValueOnce(afterAddingUsers)
+            .mockResolvedValueOnce(afterAddingUsers);
 
         getJourneyHistoryAsync.mockResolvedValue([]);
 
         await addSampleData();
 
-        expect(addUserAsync).toHaveBeenCalledTimes(9); // already 1 exists
+        expect(addUserAsync).toHaveBeenCalledTimes(9);
     });
 
     it('adds journeys to users with no history', async () => {
@@ -75,19 +89,17 @@ describe('addSampleData', () => {
         }));
 
         getAllUsers
-            .mockResolvedValueOnce(mockUsers) // initial
-            .mockResolvedValueOnce(mockUsers) // after update
-            .mockResolvedValueOnce(mockUsers) // after adding missing users
-            .mockResolvedValueOnce(mockUsers); // before journey loop
+            .mockResolvedValueOnce(mockUsers)
+            .mockResolvedValueOnce(mockUsers)
+            .mockResolvedValueOnce(mockUsers)
+            .mockResolvedValueOnce(mockUsers);
 
-        getJourneyHistoryAsync.mockResolvedValue([]); // no journeys
+        getJourneyHistoryAsync.mockResolvedValue([]);
         calculateScore.mockReturnValue({ score: 90 });
 
         await addSampleData();
 
-        // Each user should get 3 recent + 5 older journeys
         expect(addJourneyAsync).toHaveBeenCalledTimes(mockUsers.length * (3 + 5));
-        // Optional: verify calculateScore called for each journey
         expect(calculateScore).toHaveBeenCalledTimes(mockUsers.length * (3 + 5));
     });
 });

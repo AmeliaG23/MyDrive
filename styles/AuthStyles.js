@@ -1,6 +1,21 @@
+/**
+ * AuthStyles.js
+ * ----------------
+ * Created: 29-08-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Stylesheet for auth screens:
+ *      - screens/AuthScreens/LoginScreen.js
+ *      - screens/AuthScreens/SignUpScreen.js
+ *
+ * (Rani et al., 2021)
+ */
+
 import { StyleSheet } from 'react-native';
 
-// Aviva Colors
 const yellow = '#F9A800';
 const teal = '#008080';
 const lightGray = '#f5f5f5';
@@ -39,7 +54,6 @@ const AuthStyles = StyleSheet.create({
     },
     secondButtonText: {
         textAlign: 'center',
-        // marginTop: 15,
         color: teal,
         fontWeight: '500',
     },
@@ -68,8 +82,7 @@ const AuthStyles = StyleSheet.create({
         fontSize: 16,
         color: '#fff',
         fontWeight: '600',
-    },
-
+    }
 });
 
 export default AuthStyles;

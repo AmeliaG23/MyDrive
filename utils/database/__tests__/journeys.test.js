@@ -1,3 +1,17 @@
+/**
+ * journeys.test.js
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Functional tests for journeys.js
+ *
+ * (Rani et al., 2021)
+ */
+
 /* eslint-env jest */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
