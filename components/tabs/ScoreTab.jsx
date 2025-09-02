@@ -1,14 +1,26 @@
+/**
+ * ScoreTab.jsx
+ * ----------------
+ * Created: 01-08-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Tab to display past 30 day average score.
+ *    Provides contextual messages where and how user should improve their score.
+ *    Summarises the total time, miles and duration of journeys in last 30 days.
+ *
+ * (Rani et al., 2021)
+ */
+
+import { getScoreColor } from "@/utils";
 import React from "react";
 import { ScrollView, Text, View } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import TabStyles from "../../styles/TabStyles"; // new styles
+import TabStyles from "../../styles/TabStyles";
 
-const getScoreColor = (score) => {
-  if (score >= 80) return "#4CAF50"; // green
-  if (score >= 50) return "#FFC107"; // amber
-  return "#F44336"; // red
-};
-
+// Warning message function to display data specific reccomendations on how to improve their score
 const getWarningMessage = (score, category) => {
   if (score >= 80) return null;
   switch (category) {
@@ -25,6 +37,7 @@ const getWarningMessage = (score, category) => {
   }
 };
 
+// Simple horizontal bar visualizing score performance
 const ProgressBar = ({ score }) => (
   <View style={TabStyles.progressBar}>
     <View
@@ -36,6 +49,7 @@ const ProgressBar = ({ score }) => (
   </View>
 );
 
+// Displays a metric summary (miles, hours, trips)
 const SummaryCard = ({ iconName, label, value }) => (
   <View style={TabStyles.summaryCard}>
     <MaterialCommunityIcons name={iconName} size={28} color="#008080" />
@@ -48,10 +62,12 @@ export default function ScoreTab({ journeys }) {
   const now = Date.now();
   const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
+  // Filter journeys to include only those within the last 30 days
   const recentJourneys = journeys.filter(
     (j) => now - new Date(j.date).getTime() <= THIRTY_DAYS_MS
   );
 
+  // Message when no journeys are available
   if (recentJourneys.length === 0) {
     return (
       <View style={TabStyles.noDataContainer}>
@@ -62,6 +78,7 @@ export default function ScoreTab({ journeys }) {
     );
   }
 
+  // Compiles scores across journeys
   const averageScores = recentJourneys.reduce(
     (acc, journey) => {
       const scores = journey.scores || {};
@@ -74,8 +91,8 @@ export default function ScoreTab({ journeys }) {
     { braking: 0, cornering: 0, phoneDistraction: 0, speed: 0 }
   );
 
+  // Average for each category
   const count = recentJourneys.length;
-
   const avgBraking = Math.round(averageScores.braking / count);
   const avgCornering = Math.round(averageScores.cornering / count);
   const avgPhoneDistraction = Math.round(
@@ -93,6 +110,7 @@ export default function ScoreTab({ journeys }) {
   }, 0);
   const totalTrips = recentJourneys.length;
 
+  // Card component to display score, progress bar, and messages
   const ScoreCard = ({ title, score, iconName }) => {
     const warning = getWarningMessage(score, title);
     return (
@@ -109,6 +127,7 @@ export default function ScoreTab({ journeys }) {
           </Text>
         </View>
         <ProgressBar score={score} />
+        {/* Only render a message if score < 80 */}
         {warning && (
           <View
             style={[
@@ -144,8 +163,6 @@ export default function ScoreTab({ journeys }) {
         iconName="cellphone-off"
       />
       <ScoreCard title="Speed" score={avgSpeed} iconName="speedometer" />
-
-      {/* Summary cards container */}
       <View style={TabStyles.summaryContainer}>
         <SummaryCard
           iconName="map-marker-distance"

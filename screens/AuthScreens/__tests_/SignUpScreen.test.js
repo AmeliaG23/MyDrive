@@ -1,3 +1,17 @@
+/**
+ * SignUpScreen.test.jsx
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Functional tests for SignUpScreen.jsx
+ *
+ * (Rani et al., 2021)
+ */
+
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
 import { Alert } from 'react-native';
@@ -18,7 +32,6 @@ beforeEach(() => {
     jest.spyOn(Alert, 'alert');
 });
 
-// Simulate selecting date using the native DateTimePicker with proper act wrapping
 const simulateDateChange = async (screen, dob) => {
     await act(async () => {
         fireEvent.press(screen.getByPlaceholderText('Date of Birth (MM/DD/YYYY)'));
@@ -34,7 +47,6 @@ const simulateDateChange = async (screen, dob) => {
     });
 };
 
-// Fill all required form fields including date, wrapped in act
 const fillValidForm = async (screen, options = {}) => {
     const {
         firstName = 'Jane',

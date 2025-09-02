@@ -1,3 +1,18 @@
+/**
+ * JourneyScreen.jsx
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Displays breakdown for a single journey with Doughnut Chart and breakdown.
+ *    Allows users to select if they were a passenger in a journey and to delete the journey.
+ * 
+ * (Rani et al., 2021)
+ */
+
 import { deleteJourneyAsync } from '@/utils';
 import { CommonActions } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
@@ -14,19 +29,16 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import DoughnutChart from '../components/charts/DoughnutChart';
 import { UserContext } from '../context/UserContext';
 import JourneyStyles from '../styles/JourneyStyles';
+import { getScoreColor } from '../utils/formatters/getScoreColor';
 
-function getScoreColor(score) {
-    if (score >= 80) return '#4CAF50';
-    if (score >= 60) return '#F9A800';
-    return '#F44336';
-}
-
+// Function to format label
 function formatLabel(key) {
     return key
         .replace(/([a-z])([A-Z])/g, '$1 $2')
         .replace(/^./, (str) => str.toUpperCase());
 }
 
+// Function to display a score breakdown
 function ScoreBreakdown({ scores }) {
     if (!scores) return null;
 
@@ -61,6 +73,7 @@ export default function JourneyScreen({ route, navigation }) {
     const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
     const [wasPassenger, setWasPassenger] = useState(null);
 
+    // If there is no journey data
     if (!journey) {
         return (
             <View style={JourneyStyles.container}>
@@ -69,12 +82,14 @@ export default function JourneyScreen({ route, navigation }) {
         );
     }
 
+    // Function for when the user selects that they were a passenger
     const handlePassengerPress = () => {
         setWasPassenger(null);
         setPassengerModalVisible(true);
         setConfirmDeleteVisible(false);
     };
 
+    // Function to delete the journey if the user selects to confirm they were a passenger
     const handleDeleteJourney = async () => {
         try {
             await deleteJourneyAsync(user.id, journey.id);
@@ -94,7 +109,6 @@ export default function JourneyScreen({ route, navigation }) {
 
     return (
         <View style={JourneyStyles.screenWrapper}>
-            {/* Header */}
             <View style={JourneyStyles.header}>
                 <TouchableOpacity
                     onPress={() => navigation.goBack()}
@@ -104,15 +118,11 @@ export default function JourneyScreen({ route, navigation }) {
                     <MaterialCommunityIcons name="arrow-left" size={28} color="white" />
                 </TouchableOpacity>
             </View>
-
-            {/* Top Section */}
             <View style={JourneyStyles.topSection}>
                 <Text style={JourneyStyles.title}>
                     Journey on {new Date(journey.date).toLocaleDateString()}
                 </Text>
-
                 <DoughnutChart score={journey.scores?.total ?? 0} />
-
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 16 }}>
                     <View style={[JourneyStyles.card, { flex: 1, marginRight: 8 }]}>
                         <View style={JourneyStyles.cardHeader}>
@@ -123,7 +133,6 @@ export default function JourneyScreen({ route, navigation }) {
                             {journey.distance ? `${journey.distance} miles` : 'N/A'}
                         </Text>
                     </View>
-
                     <View style={[JourneyStyles.card, { flex: 1, marginLeft: 8 }]}>
                         <View style={JourneyStyles.cardHeader}>
                             <MaterialCommunityIcons name="clock-outline" size={24} color="#008080" />
@@ -135,8 +144,6 @@ export default function JourneyScreen({ route, navigation }) {
                     </View>
                 </View>
             </View>
-
-            {/* Bottom Section */}
             <View style={JourneyStyles.bottomSection}>
                 <TouchableOpacity
                     onPress={handlePassengerPress}
@@ -144,9 +151,7 @@ export default function JourneyScreen({ route, navigation }) {
                 >
                     <Text style={JourneyStyles.passengerTextSmall}>Were you a passenger?</Text>
                 </TouchableOpacity>
-
                 <Text style={JourneyStyles.scoreTitle}>Score Breakdown</Text>
-
                 <ScrollView
                     style={{ maxHeight: 200 }}
                     contentContainerStyle={{ paddingVertical: 8 }}
@@ -155,7 +160,6 @@ export default function JourneyScreen({ route, navigation }) {
                     <ScoreBreakdown scores={journey.scores} />
                 </ScrollView>
             </View>
-
             {/* Passenger Modal */}
             <Modal
                 visible={passengerModalVisible}
@@ -179,7 +183,6 @@ export default function JourneyScreen({ route, navigation }) {
                             >
                                 <Text style={JourneyStyles.inlineButtonText}>Yes</Text>
                             </TouchableOpacity>
-
                             <TouchableOpacity
                                 style={JourneyStyles.inlineButton}
                                 onPress={() => {
@@ -193,7 +196,6 @@ export default function JourneyScreen({ route, navigation }) {
                     </View>
                 </View>
             </Modal>
-
             {/* Confirm Delete Modal */}
             <Modal
                 visible={confirmDeleteVisible}

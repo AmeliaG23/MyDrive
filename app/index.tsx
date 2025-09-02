@@ -1,3 +1,17 @@
+/**
+ * index.tsx
+ * ----------------
+ * Created: 20-07-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Main entry point for the app and initiates database with test users 1-10.
+ *
+ * (Rani et al., 2021)
+ */
+
 import React, { useEffect /*, useContext */ } from "react";
 import { StatusBar, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -14,7 +28,7 @@ import { addSampleData, testUsersExist } from "../utils/database";
 /* -------------------------------------------------------------------------- */
 /* TrackingManager: manages background location tracking for logged-in users. */
 /* Uncomment this block when running on a physical device outside Expo Go.    */
-/*
+/* 
 function TrackingManager() {
   // Get current user info from context
   const { user } = useContext(UserContext);
@@ -46,6 +60,7 @@ function TrackingManager() {
   return null;
 }
 */
+// (Aboah, 2021)
 
 export default function App() {
   useEffect(() => {

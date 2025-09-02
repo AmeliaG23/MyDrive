@@ -1,12 +1,24 @@
+/**
+ * JourneysTab.test.jsx
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Functional tests for JourneysTab.jsx
+ *
+ * (Rani et al., 2021)
+ */
+
 import { formatDate } from "@/utils";
 import { fireEvent, render, waitFor } from "@testing-library/react-native";
 import React from "react";
 import JourneysTab from "../JourneysTab";
 
-// Mock MaterialCommunityIcons
 jest.mock("react-native-vector-icons/MaterialCommunityIcons", () => "Icon");
 
-// Mock styles
 jest.mock("../../../styles/TabStyles", () => ({
   dropdownHeader: {},
   dropdownButton: {},
@@ -25,7 +37,6 @@ jest.mock("../../../styles/TabStyles", () => ({
   progressFill: {},
 }));
 
-// Mock navigation
 const mockNavigate = jest.fn();
 jest.mock("@react-navigation/native", () => ({
   useNavigation: () => ({ navigate: mockNavigate }),
@@ -67,7 +78,6 @@ describe("JourneysTab", () => {
     fireEvent.press(getByText("All ▼"));
     expect(queryByText("2 Months")).toBeTruthy();
 
-    // Close modal
     fireEvent.press(queryByText("2 Months").parent);
     await waitFor(() => {
       expect(queryByText("2 Months")).toBeNull();
@@ -83,12 +93,10 @@ describe("JourneysTab", () => {
       <JourneysTab journeys={journeys} filter="2mo" setFilter={setFilter} />
     );
 
-    // Filter 2 months
     expect(queryByText(formatDate("2025-06-20"))).toBeTruthy();
     expect(queryByText(formatDate("2025-04-15"))).toBeNull();
     expect(queryByText(formatDate("2024-12-01"))).toBeNull();
 
-    // Filter 6 months
     rerender(
       <JourneysTab journeys={journeys} filter="6mo" setFilter={setFilter} />
     );
@@ -96,7 +104,6 @@ describe("JourneysTab", () => {
     expect(queryByText(formatDate("2025-04-15"))).toBeTruthy();
     expect(queryByText(formatDate("2024-12-01"))).toBeNull();
 
-    // Filter all
     rerender(
       <JourneysTab journeys={journeys} filter="all" setFilter={setFilter} />
     );

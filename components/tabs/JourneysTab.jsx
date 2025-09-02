@@ -1,4 +1,20 @@
-import { formatDate } from "@/utils";
+/**
+ * JourneysTab.jsx
+ * ----------------
+ * Created: 01-08-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Tab to display past journeys for the current user.
+ *    - Allows journeys to be filtered by time windows
+ *    - Displays journeys in a card which navigates to a screen displaying all journey details
+ *
+ * (Rani et al., 2021)
+ */
+
+import { formatDate, getScoreColor } from "@/utils";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
@@ -18,16 +34,11 @@ const DROPDOWN_OPTIONS = [
   { key: "all", label: "All" },
 ];
 
-function getScoreColor(score) {
-  if (score >= 80) return "#4CAF50"; // green
-  if (score >= 60) return "#F9A800"; // amber
-  return "#F44336"; // red
-}
-
 export default function JourneysTab({ journeys, filter, setFilter }) {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const navigation = useNavigation();
 
+  // Time-based filtering
   const now = Date.now();
   const filteredJourneys = journeys.filter((j) => {
     const daysAgo = (now - new Date(j.date).getTime()) / (1000 * 3600 * 24);
@@ -52,8 +63,7 @@ export default function JourneysTab({ journeys, filter, setFilter }) {
           </TouchableOpacity>
         </View>
       )}
-
-      {/* Dropdown Modal */}
+      {/* Modal to allow filter for journeys to be shown */}
       <Modal
         transparent
         visible={dropdownVisible}
@@ -62,7 +72,6 @@ export default function JourneysTab({ journeys, filter, setFilter }) {
       >
         <View style={TabStyles.modalOverlay}>
           <View style={TabStyles.modalContent}>
-            {/* Close Button */}
             <TouchableOpacity
               style={TabStyles.closeButtonContainer}
               onPress={() => setDropdownVisible(false)}
@@ -72,8 +81,6 @@ export default function JourneysTab({ journeys, filter, setFilter }) {
                 style={TabStyles.closeButtonIcon}
               />
             </TouchableOpacity>
-
-            {/* Options List */}
             <FlatList
               data={DROPDOWN_OPTIONS}
               keyExtractor={(item) => item.key}
@@ -99,7 +106,6 @@ export default function JourneysTab({ journeys, filter, setFilter }) {
           </View>
         </View>
       </Modal>
-
       {/* No journeys message */}
       {filteredJourneys.length === 0 ? (
         <View style={TabStyles.noDataContainer}>
@@ -116,7 +122,6 @@ export default function JourneysTab({ journeys, filter, setFilter }) {
                 navigation.navigate("JourneyScreen", { journey: j })
               }
             >
-              {/* Date with calendar icon */}
               <View
                 style={{
                   flexDirection: "row",
@@ -132,8 +137,7 @@ export default function JourneysTab({ journeys, filter, setFilter }) {
                 />
                 <Text style={TabStyles.cardTitle}>{formatDate(j.date)}</Text>
               </View>
-
-              {/* Score progress bar */}
+              {/* Scores bar */}
               {j.scores?.total !== undefined && (
                 <View style={{ marginVertical: 6 }}>
                   <Text style={{ marginBottom: 4, fontWeight: "600" }}>
@@ -152,8 +156,6 @@ export default function JourneysTab({ journeys, filter, setFilter }) {
                   </View>
                 </View>
               )}
-
-              {/* Duration row with icon */}
               <View
                 style={{
                   flexDirection: "row",

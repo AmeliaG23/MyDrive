@@ -1,10 +1,23 @@
+/**
+ * ProfileScreen.test.jsx
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Functional tests for ProfileScreen.jsx
+ *
+ * (Rani et al., 2021)
+ */
+
 import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import React from 'react';
 import { UserContext } from '../../context/UserContext';
 import * as utils from '../../utils';
 import ProfileScreen from '../ProfileScreen';
 
-// Mock getUserById and formatDate utilities
 jest.mock('../../utils', () => ({
     getUserById: jest.fn(),
     formatDate: jest.fn((date) => `formatted-${date}`),

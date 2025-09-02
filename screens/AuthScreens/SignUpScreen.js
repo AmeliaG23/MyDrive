@@ -1,3 +1,19 @@
+/**
+ * SignUpScreen.jsx
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Allows users to sign up so they can log in to the app.
+ *    Enforces minimum age to be 17.
+ *    Ensures password is secure (includes a special character + numbers)
+ * 
+ * (Rani et al., 2021)
+ */
+
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
@@ -13,6 +29,7 @@ import {
 import AuthStyles from '../../styles/AuthStyles';
 import { addUserAsync } from '../../utils';
 
+// Function to ensure password is secure and display a bar from red to green
 const getPasswordStrength = (password) => {
     let score = 0;
     if (password.length >= 8) score++;
@@ -21,8 +38,11 @@ const getPasswordStrength = (password) => {
     if (/\d/.test(password)) score++;
     if (/[^A-Za-z0-9]/.test(password)) score++;
 
+    // unsecure password
     if (score <= 2) return { label: 'Weak', color: 'red', width: '33%' };
+    // moderately secure password
     if (score === 3 || score === 4) return { label: 'Medium', color: 'orange', width: '66%' };
+    // strong password
     return { label: 'Strong', color: 'green', width: '100%' };
 };
 
@@ -43,31 +63,30 @@ export default function SignUpScreen({ navigation }) {
             return;
         }
 
-        // Age check
         const today = new Date();
         const birthDate = new Date(dob);
         const age = today.getFullYear() - birthDate.getFullYear();
         const monthDiff = today.getMonth() - birthDate.getMonth();
         const dayDiff = today.getDate() - birthDate.getDate();
-
         const isAtLeast17 =
             age > 17 || (age === 17 && (monthDiff > 0 || (monthDiff === 0 && dayDiff >= 0)));
 
+        // Ensures minimum age is 17
         if (!isAtLeast17) {
             Alert.alert('Age Restriction', 'You must be at least 17 years old to sign up.');
             return;
         }
-
+        // Ensures passwords match
         if (password !== confirmPassword) {
             Alert.alert('Error', 'Passwords do not match.');
             return;
         }
-
+        // Ensures password is strong
         if (passwordStrength.label !== 'Strong') {
             Alert.alert('Weak Password', 'Please use a stronger password.');
             return;
         }
-
+        // Try Catch- attempts to add user to DB
         try {
             const success = await addUserAsync({
                 username,
@@ -76,22 +95,20 @@ export default function SignUpScreen({ navigation }) {
                 lastName,
                 dob: formattedDob,
             });
-
+            // Unsuccessful
             if (!success) {
                 Alert.alert('Error', 'Username already exists. Please choose another.');
                 return;
             }
-
+            // When account is added successfully
             Alert.alert('Success', 'Account created!');
             navigation.navigate('Login');
         } catch (error) {
-            console.error('Error signing up', error);
             Alert.alert('Error', 'Failed to create account.');
         }
     };
 
-
-
+    // Function to set date when it is selected from date picker
     const onChangeDate = (event, selectedDate) => {
         setShowDatePicker(false);
         if (event.type === 'set' && selectedDate) {
@@ -170,7 +187,6 @@ export default function SignUpScreen({ navigation }) {
                         Strength: {passwordStrength.label}
                     </Text>
                 </View>
-
                 <TextInput
                     style={AuthStyles.input}
                     placeholder="Confirm Password"

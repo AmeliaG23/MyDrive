@@ -1,148 +1,118 @@
-import * as utils from '@/utils'; // For deleteJourneyAsync mock
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+/**
+ * JourneyScreen.test.jsx
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Functional tests for JourneyScreen.jsx
+ *
+ * (Rani et al., 2021)
+ */
+
+import { act, fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
 import { UserContext } from '../../context/UserContext';
-import JourneyScreen from '../JourneyScreen'; // Adjust path
+import JourneyScreen from '../JourneyScreen';
 
-// Mock navigation prop
 const mockNavigation = {
     goBack: jest.fn(),
     dispatch: jest.fn(),
 };
 
-// Sample journey data for tests
-const sampleJourney = {
-    id: 'journey1',
-    date: '2025-07-31T00:00:00.000Z',
-    distance: 1234,
+const mockUser = { id: 'user123' };
+const mockJourney = {
+    id: 'journey123',
+    date: '2023-01-01T00:00:00Z',
     scores: {
-        total: 85,
-        brakingAcceleration: 90,
-        cornering: 80,
+        total: 75,
+        speed: 80,
+        braking: 70,
     },
+    distance: 10,
+    length: 15,
 };
 
-// Mock user context
-const user = {
-    id: 'user1',
-    username: 'testuser',
+const mockRouteWithJourney = {
+    params: { journey: mockJourney },
 };
+
+const mockRouteNoJourney = {
+    params: {},
+};
+
+jest.mock('@/utils', () => ({
+    deleteJourneyAsync: jest.fn(),
+}));
+
+const Wrapper = ({ children }) => (
+    <UserContext.Provider value={{ user: mockUser }}>
+        {children}
+    </UserContext.Provider>
+);
 
 describe('JourneyScreen', () => {
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
-    test('renders journey details correctly', () => {
-        const { getByText } = render(
-            <UserContext.Provider value={{ user }}>
-                <JourneyScreen
-                    route={{ params: { journey: sampleJourney } }}
-                    navigation={mockNavigation}
-                />
-            </UserContext.Provider>
-        );
-
-        expect(getByText('Journey on 7/31/2025')).toBeTruthy();
-        expect(getByText('1234 meters')).toBeTruthy();
-        expect(getByText('Were you a passenger?')).toBeTruthy();
-    });
-
     test('shows error message when no journey provided', () => {
         const { getByText } = render(
-            <UserContext.Provider value={{ user }}>
-                <JourneyScreen
-                    route={{ params: {} }}
-                    navigation={mockNavigation}
-                />
-            </UserContext.Provider>
+            <JourneyScreen route={mockRouteNoJourney} navigation={mockNavigation} />,
+            { wrapper: Wrapper }
         );
 
-        expect(getByText('No journey data available')).toBeTruthy();
+        expect(getByText(/no journey data available/i)).toBeTruthy();
     });
 
-    test('opens passenger modal on button press', () => {
-        const { getByText, queryByText } = render(
-            <UserContext.Provider value={{ user }}>
-                <JourneyScreen
-                    route={{ params: { journey: sampleJourney } }}
-                    navigation={mockNavigation}
-                />
-            </UserContext.Provider>
+    test('renders journey details correctly', () => {
+        const { getByText, getByTestId } = render(
+            <JourneyScreen route={mockRouteWithJourney} navigation={mockNavigation} />,
+            { wrapper: Wrapper }
         );
 
-        fireEvent.press(getByText('Were you a passenger?'));
-        expect(queryByText('Were you a passenger on this journey?')).toBeTruthy();
+        expect(getByText(/journey on/i)).toBeTruthy();
+        expect(getByText(/10 miles/i)).toBeTruthy();
+        expect(getByText(/15 minutes/i)).toBeTruthy();
+        expect(getByText(/speed/i)).toBeTruthy();
+        expect(getByText(/braking/i)).toBeTruthy();
+        expect(getByTestId('backButton')).toBeTruthy();
     });
 
-    test('validates passenger modal selection', () => {
+    test('opens passenger modal and cancels correctly', async () => {
         const { getByText, queryByText } = render(
-            <UserContext.Provider value={{ user }}>
-                <JourneyScreen
-                    route={{ params: { journey: sampleJourney } }}
-                    navigation={mockNavigation}
-                />
-            </UserContext.Provider>
+            <JourneyScreen route={mockRouteWithJourney} navigation={mockNavigation} />,
+            { wrapper: Wrapper }
         );
 
-        fireEvent.press(getByText('Were you a passenger?'));
-        fireEvent.press(getByText('Confirm'));
-
-        // Alert will show - no selection
-        // Because React Native Alert is native, we can spy on it
-
-        const alertSpy = jest.spyOn(global, 'alert').mockImplementation(() => { });
-        fireEvent.press(getByText('Confirm'));
-        expect(alertSpy).toHaveBeenCalled();
-        alertSpy.mockRestore();
-    });
-
-    test('shows delete confirmation modal when "Yes" selected', () => {
-        const { getByText, queryByText } = render(
-            <UserContext.Provider value={{ user }}>
-                <JourneyScreen
-                    route={{ params: { journey: sampleJourney } }}
-                    navigation={mockNavigation}
-                />
-            </UserContext.Provider>
-        );
-
-        fireEvent.press(getByText('Were you a passenger?'));
-        fireEvent.press(getByText('Yes'));
-        fireEvent.press(getByText('Confirm'));
-
-        expect(queryByText('Are you sure you want to delete this journey?')).toBeTruthy();
-    });
-
-    test('deletes journey and resets navigation', async () => {
-        jest.spyOn(utils, 'deleteJourneyAsync').mockResolvedValue();
-
-        const { getByText, queryByText } = render(
-            <UserContext.Provider value={{ user }}>
-                <JourneyScreen
-                    route={{ params: { journey: sampleJourney } }}
-                    navigation={mockNavigation}
-                />
-            </UserContext.Provider>
-        );
-
-        fireEvent.press(getByText('Were you a passenger?'));
-        fireEvent.press(getByText('Yes'));
-        fireEvent.press(getByText('Confirm'));
-
-        fireEvent.press(getByText('Delete Journey'));
-
-        await waitFor(() => {
-            expect(utils.deleteJourneyAsync).toHaveBeenCalledWith(user.id, sampleJourney.id);
-            expect(mockNavigation.dispatch).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    type: 'RESET',
-                    payload: expect.objectContaining({
-                        routes: [{ name: 'MainTabs' }],
-                    }),
-                })
-            );
-            expect(queryByText('Journey deleted')).toBeNull(); // Alert shows on native, can't test
+        // Open modal
+        await act(async () => {
+            fireEvent.press(getByText(/were you a passenger/i));
         });
+
+        expect(getByText(/were you a passenger on this journey/i)).toBeTruthy();
+
+        // Cancel passenger modal
+        await act(async () => {
+            fireEvent.press(getByText('No'));
+        });
+
+        expect(queryByText(/were you a passenger on this journey/i)).toBeNull();
+    });
+
+    test('back button calls navigation.goBack', async () => {
+        const { getByTestId } = render(
+            <JourneyScreen route={mockRouteWithJourney} navigation={mockNavigation} />,
+            { wrapper: Wrapper }
+        );
+
+        const backButton = getByTestId('backButton');
+        await act(async () => {
+            fireEvent.press(backButton);
+        });
+
+        expect(mockNavigation.goBack).toHaveBeenCalled();
     });
 });

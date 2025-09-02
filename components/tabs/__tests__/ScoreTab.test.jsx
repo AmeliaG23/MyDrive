@@ -1,11 +1,23 @@
+/**
+ * ScoreTab.test.jsx
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Functional tests for ScoreTab.jsx
+ *
+ * (Rani et al., 2021)
+ */
+
 import { render } from "@testing-library/react-native";
 import React from "react";
-import ScoreTab from "../ScoreTab"; // update import path
+import ScoreTab from "../ScoreTab";
 
-// Mock MaterialCommunityIcons
 jest.mock("react-native-vector-icons/MaterialCommunityIcons", () => "Icon");
 
-// Helper to create journey with scores, distance, and length in minutes
 const createJourney = (daysAgo, scores, distance = 0, lengthMinutes = 0) => {
   const date = new Date(
     Date.now() - daysAgo * 24 * 60 * 60 * 1000

@@ -1,3 +1,18 @@
+/**
+ * ProfileScreen.jsx
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Displays user details (first name, last name, DOB, username).
+ *    Allows the user to open an info modal and what to do if their details are incorrect.
+ * 
+ * (Rani et al., 2021)
+ */
+
 import { Ionicons } from '@expo/vector-icons';
 import React, { useContext, useEffect, useState } from 'react';
 import {
@@ -17,6 +32,7 @@ export default function ProfileScreen() {
     const [userDetails, setUserDetails] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
+    // Fetching user details
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
@@ -28,14 +44,12 @@ export default function ProfileScreen() {
                 console.error("Error fetching user details:", error);
             }
         };
-
         fetchUserDetails();
     }, [user]);
 
     return (
         <View style={ProfileStyles.container} testID="profile-screen">
             <Text style={ProfileStyles.title} testID="profile-title">Profile</Text>
-
             <View style={ProfileStyles.card} testID="profile-card">
                 <TouchableOpacity
                     style={ProfileStyles.helpButton}
@@ -44,32 +58,31 @@ export default function ProfileScreen() {
                 >
                     <Ionicons name="information-circle-outline" size={22} color="#008080" />
                 </TouchableOpacity>
-
+                {/* Only shows user details if they are found */}
                 {userDetails ? (
                     <>
                         <Text style={ProfileStyles.label} testID="label-first-name">First Name</Text>
                         <Text style={ProfileStyles.value} testID="value-first-name">{userDetails.firstName}</Text>
-
                         <Text style={ProfileStyles.label} testID="label-last-name">Last Name</Text>
                         <Text style={ProfileStyles.value} testID="value-last-name">{userDetails.lastName}</Text>
-
                         <Text style={ProfileStyles.label} testID="label-dob">Date of Birth</Text>
                         <Text style={ProfileStyles.value} testID="value-dob">{formatDate(userDetails.dob)}</Text>
-
                         <Text style={ProfileStyles.label} testID="label-username">Username</Text>
                         <Text style={ProfileStyles.value} testID="value-username">{userDetails.username}</Text>
                     </>
                 ) : (
+                    // Spinner if loading/details not found
                     <ActivityIndicator size="large" color="#008080" testID="loading-indicator" />
                 )}
             </View>
-
             <HelpModal visible={showModal} onClose={() => setShowModal(false)} />
         </View>
     );
 }
 
+// Function for modal to give user information on who to contact if their personal details are incorrect
 function HelpModal({ visible, onClose }) {
+    // Handles email and phone number press
     const handleEmailPress = () => {
         Linking.openURL('mailto:support@example.com');
     };
@@ -97,20 +110,17 @@ function HelpModal({ visible, onClose }) {
                     onPress={() => { }}
                     testID="modal-content"
                 >
-                    {/* Close Button */}
                     <TouchableOpacity
                         onPress={onClose}
-                        style={{ position: 'absolute', top: 12, right: 12, padding: 8 }}
+                        style={ProfileStyles.modalCloseButton}
                         testID="modal-close-button"
                     >
-                        <Ionicons name="close" size={24} color="#333" />
+                        <Ionicons name="close" style={ProfileStyles.modalCloseIcon} />
                     </TouchableOpacity>
-
                     <Text style={ProfileStyles.modalTitle} testID="modal-title">Need Help?</Text>
                     <Text style={ProfileStyles.modalText} testID="modal-text">
                         If any of your details are incorrect, please contact our support team:
                     </Text>
-
                     <TouchableOpacity
                         onPress={handleEmailPress}
                         style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 8 }}
@@ -121,7 +131,6 @@ function HelpModal({ visible, onClose }) {
                             support@example.com
                         </Text>
                     </TouchableOpacity>
-
                     <TouchableOpacity
                         onPress={handlePhonePress}
                         style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 8 }}

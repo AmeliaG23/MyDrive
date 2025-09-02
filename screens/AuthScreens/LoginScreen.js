@@ -1,3 +1,18 @@
+/**
+ * LoginScreen.jsx
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Allows users to sign in before accessing the Home Screen.
+ *    Implements a 3 secon delay before navigation.
+ *
+ * (Rani et al., 2021)
+ */
+
 import React, { useContext, useEffect, useState } from 'react';
 import {
     ActivityIndicator,
@@ -25,6 +40,7 @@ export default function LoginScreen({ navigation, skipLoginDelay = false }) {
         });
     }, [navigation]);
 
+    // Function to handle log in with 3 second delay when successful
     const handleLogin = async () => {
         if (!username || !password) {
             Alert.alert('Error', 'Please enter both username and password.');
@@ -33,8 +49,7 @@ export default function LoginScreen({ navigation, skipLoginDelay = false }) {
 
         setLoading(true);
         try {
-            const users = await getAllUsers();
-
+            const users = await getAllUsers()
             if (!users) {
                 Alert.alert('Error', 'Unable to fetch users.');
                 setLoading(false);
@@ -46,11 +61,11 @@ export default function LoginScreen({ navigation, skipLoginDelay = false }) {
             );
 
             if (user) {
-                if (skipLoginDelay) {
+                if (skipLoginDelay) { // For testing: skip transition delay
                     login(user);
                     setLoading(false);
                 } else {
-                    // Artificial 3-second delay before logging in
+                    // 3-second delay before logging in to stop onboarding screens flashing
                     setTimeout(() => {
                         login(user);
                         setLoading(false);
@@ -61,7 +76,6 @@ export default function LoginScreen({ navigation, skipLoginDelay = false }) {
                 setLoading(false);
             }
         } catch (error) {
-            console.error('Error logging in', error);
             Alert.alert('Error', 'Failed to log in.');
             setLoading(false);
         }
@@ -70,7 +84,6 @@ export default function LoginScreen({ navigation, skipLoginDelay = false }) {
     return (
         <View style={AuthStyles.container}>
             <Image source={require('../../assets/aviva-logo.png')} style={AuthStyles.logo} />
-
             <View style={AuthStyles.formContainer}>
                 <TextInput
                     style={AuthStyles.input}
@@ -79,7 +92,6 @@ export default function LoginScreen({ navigation, skipLoginDelay = false }) {
                     onChangeText={setUsername}
                     editable={!loading}
                 />
-
                 <TextInput
                     style={AuthStyles.input}
                     placeholder="Password"
@@ -88,7 +100,6 @@ export default function LoginScreen({ navigation, skipLoginDelay = false }) {
                     onChangeText={setPassword}
                     editable={!loading}
                 />
-
                 <TouchableOpacity
                     style={[AuthStyles.button, loading && { opacity: 0.6 }]}
                     onPress={handleLogin}
@@ -96,7 +107,6 @@ export default function LoginScreen({ navigation, skipLoginDelay = false }) {
                 >
                     <Text style={AuthStyles.buttonText}>Login</Text>
                 </TouchableOpacity>
-
                 <Text
                     style={[AuthStyles.secondButtonText, { marginTop: 20 }]}
                     onPress={() => navigation.navigate('Signup')}
@@ -104,7 +114,7 @@ export default function LoginScreen({ navigation, skipLoginDelay = false }) {
                     Don't have an account? Sign Up
                 </Text>
             </View>
-
+            {/* Spinner shown when loading is true */}
             {loading && (
                 <View style={AuthStyles.overlay}>
                     <ActivityIndicator size="large" color="#fff" />

@@ -1,4 +1,20 @@
-import { Ionicons } from '@expo/vector-icons';
+/**
+ * TermsOnboardingScreen.jsx
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Displays terms of use and permisions required for users to utilise MyDrive.
+ *    Displays what data is collected.
+ *    Requests location permissions, which is essential for telematics tracking. 
+ * 
+ * (Rani et al., 2021)
+ */
+
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import Checkbox from 'expo-checkbox';
 import * as Location from 'expo-location';
 import React, { useContext, useState } from 'react';
@@ -19,6 +35,7 @@ export default function TermsOnboardingScreen({ navigation }) {
     const [loading, setLoading] = useState(false);
     const { setOnboarded, setLocationPermissionGranted } = useContext(UserContext);
 
+    // Function to set loading as well as ensuring the user has given consent to location tracking
     const handleContinue = async () => {
         if (!consentGiven) {
             Alert.alert('Consent Required', 'Please agree to the terms to proceed.');
@@ -27,7 +44,6 @@ export default function TermsOnboardingScreen({ navigation }) {
 
         setLoading(true);
         try {
-            // Request location permission here
             const { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
                 Alert.alert(
@@ -38,19 +54,14 @@ export default function TermsOnboardingScreen({ navigation }) {
                 return;
             }
 
-            // Save permission granted state in context
             setLocationPermissionGranted(true);
-
-            // Mark onboarding done
             await setOnboarded(true);
 
-            // Navigate to main app screen
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'MainTabs' }],
             });
         } catch (error) {
-            console.error('Error updating onboarding status:', error);
             Alert.alert('Error', 'Something went wrong. Please try again.');
         } finally {
             setLoading(false);
@@ -59,18 +70,17 @@ export default function TermsOnboardingScreen({ navigation }) {
 
     return (
         <View style={OnboardingStyles.container}>
-            <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={{ position: 'absolute', top: 50, left: 20, zIndex: 10 }}
-                testID="backButton"
-            >
-                <Ionicons name="arrow-back" size={24} color="#008080" />
-            </TouchableOpacity>
-
             <ScrollView
-                contentContainerStyle={OnboardingStyles.scrollContent}
+                contentContainerStyle={{ paddingBottom: 40 }}
                 showsVerticalScrollIndicator={false}
             >
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{ position: 'absolute', top: 50, left: 20, zIndex: 10 }}
+                    testID="backButton"
+                >
+                    <Ionicons name="arrow-back" size={24} color="#008080" />
+                </TouchableOpacity>
                 <Image
                     source={require('../../assets/aviva-logo.png')}
                     style={OnboardingStyles.logo}
@@ -81,47 +91,51 @@ export default function TermsOnboardingScreen({ navigation }) {
                     To provide accurate driving feedback and calculate your safety score, we
                     collect and process the following data while you are driving:
                 </Text>
-
+                <View style={OnboardingStyles.iconContainer}>
+                    <FontAwesome5 name="car" size={80} color="#008080" />
+                </View>
                 <Text style={OnboardingStyles.bulletTitle}>What we collect:</Text>
-                <View style={OnboardingStyles.bulletRow}>
-                    <Text style={OnboardingStyles.bullet}>
-                        {'\u2022'} Motion (acceleration, braking, cornering)
+                <View style={OnboardingStyles.cardRow}>
+                    <FontAwesome5 name="tachometer-alt" size={24} color="#008080" />
+                    <Text style={OnboardingStyles.cardText}>
+                        Motion: acceleration, braking, cornering
                     </Text>
                 </View>
-                <View style={OnboardingStyles.bulletRow}>
-                    <Text style={OnboardingStyles.bullet}>
-                        {'\u2022'} GPS location (to map your journey and speed)
+                <View style={OnboardingStyles.cardRow}>
+                    <Ionicons name="location-outline" size={24} color="#008080" />
+                    <Text style={OnboardingStyles.cardText}>
+                        GPS location: map journey and speed
                     </Text>
                 </View>
-                <View style={OnboardingStyles.bulletRow}>
-                    <Text style={OnboardingStyles.bullet}>{'\u2022'} Phone usage while driving</Text>
+                <View style={OnboardingStyles.cardRow}>
+                    <FontAwesome5 name="mobile-alt" size={24} color="#008080" />
+                    <Text style={OnboardingStyles.cardText}>Phone usage while driving</Text>
                 </View>
-                <View style={OnboardingStyles.bulletRow}>
-                    <Text style={OnboardingStyles.bullet}>{'\u2022'} Background activity status</Text>
+                <View style={OnboardingStyles.cardRow}>
+                    <FontAwesome5 name="running" size={24} color="#008080" />
+                    <Text style={OnboardingStyles.cardText}>Background activity status</Text>
                 </View>
-
                 <Text style={OnboardingStyles.bulletTitle}>How we use your data:</Text>
-                <View style={OnboardingStyles.bulletRow}>
-                    <Text style={OnboardingStyles.bullet}>{'\u2022'} To calculate your driving score</Text>
+                <View style={OnboardingStyles.cardRow}>
+                    <FontAwesome5 name="chart-line" size={24} color="#008080" />
+                    <Text style={OnboardingStyles.cardText}>Calculate your driving score</Text>
                 </View>
-                <View style={OnboardingStyles.bulletRow}>
-                    <Text style={OnboardingStyles.bullet}>{'\u2022'} To offer personalized driving tips</Text>
+                <View style={OnboardingStyles.cardRow}>
+                    <FontAwesome5 name="lightbulb" size={24} color="#008080" />
+                    <Text style={OnboardingStyles.cardText}>Offer personalized driving tips</Text>
                 </View>
-                <View style={OnboardingStyles.bulletRow}>
-                    <Text style={OnboardingStyles.bullet}>
-                        {'\u2022'} To notify you about trip summaries and progress
+                <View style={OnboardingStyles.cardRow}>
+                    <FontAwesome5 name="clipboard-list" size={24} color="#008080" />
+                    <Text style={OnboardingStyles.cardText}>
+                        Notify you about trip summaries and progress
                     </Text>
                 </View>
-
                 <Text style={OnboardingStyles.note}>
-                    All data is stored securely on your device and encrypted before any
-                    transmission. Your data is never sold and only used to improve your driving
-                    experience.
+                    All data is securely stored on your device and encrypted before transmission.
+                    Your data is never sold and only used to improve your driving experience.
                 </Text>
-
-                <View
-                    style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}
-                >
+                {/* Consent Checkbox */}
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
                     <Checkbox
                         value={consentGiven}
                         onValueChange={setConsentGiven}
@@ -132,19 +146,20 @@ export default function TermsOnboardingScreen({ navigation }) {
                         I agree to data tracking and storage as outlined above.
                     </Text>
                 </View>
-
-                <TouchableOpacity
-                    style={[OnboardingStyles.button, { opacity: consentGiven ? 1 : 0.6 }]}
-                    onPress={handleContinue}
-                    disabled={!consentGiven || loading}
-                    testID="continueButton"
-                >
-                    {loading ? (
-                        <ActivityIndicator color="#fff" />
-                    ) : (
-                        <Text style={OnboardingStyles.buttonText}>Continue</Text>
-                    )}
-                </TouchableOpacity>
+                <View style={{ marginTop: 10 }}>
+                    <TouchableOpacity
+                        style={[OnboardingStyles.button, { opacity: consentGiven ? 1 : 0.6 }]}
+                        onPress={handleContinue}
+                        disabled={!consentGiven || loading}
+                        testID="continueButton"
+                    >
+                        {loading ? (
+                            <ActivityIndicator color="#fff" />
+                        ) : (
+                            <Text style={OnboardingStyles.buttonText}>Continue</Text>
+                        )}
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
         </View>
     );

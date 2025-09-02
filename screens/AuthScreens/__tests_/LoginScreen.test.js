@@ -1,3 +1,17 @@
+/**
+ * LoginScreen.test.jsx
+ * ----------------
+ * Created: 01-09-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Functional tests for LoginScreen.jsx
+ *
+ * (Rani et al., 2021)
+ */
+
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
 import { Alert } from 'react-native';
@@ -54,7 +68,6 @@ describe('LoginScreen', () => {
         fireEvent.changeText(getByPlaceholderText('Password'), 'pass');
         fireEvent.press(getByText('Login'));
 
-        // No timers to advance since delay skipped
         await waitFor(() => {
             expect(mockLogin).toHaveBeenCalledWith(user);
         });
