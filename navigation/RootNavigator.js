@@ -1,3 +1,19 @@
+/**
+ * RootNavigator.js
+ * ----------------
+ * Created: 01-08-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Root navigator which lays out the screens for multiple scenrios:
+ *      - Signed in or not
+ *      - Onboarded or not
+ *
+ * (Rani et al., 2021)
+ */
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useContext } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
@@ -15,7 +31,7 @@ const Stack = createNativeStackNavigator();
 export default function RootNavigator() {
     const { user, onboarded } = useContext(UserContext);
 
-    // Show loading spinner while onboarding status is being determined
+    // Show loading spinner while onboarding status is being loaded
     if (user && onboarded === null) {
         return (
             <View style={styles.loadingContainer}>

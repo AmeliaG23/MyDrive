@@ -1,3 +1,18 @@
+/**
+ * MainTabNavigator.js
+ * ----------------
+ * Created: 01-08-2025
+ * Author: Amelia Goldsby
+ * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+ * Course : Major Project, Level 6, QA
+ *
+ * Purpose:
+ *    Provides bottom navigation bar layout for Home, Profile, and Logout.
+ *    Also implements a confirmation modal for when the user presses the Logout option.
+ *
+ * (Rani et al., 2021)
+ */
+
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React, { useContext, useState } from 'react';
@@ -14,13 +29,15 @@ export default function MainTabNavigator() {
     const [logoutModalVisible, setLogoutModalVisible] = useState(false);
     const { logout } = useContext(UserContext);
 
+    // Function to handle log out
     const handleLogout = () => {
         setLogoutModalVisible(false);
-        logout(); // ✅ triggers switch to Login in RootNavigator
+        logout();
     };
 
     return (
         <>
+            {/* Bottom Tab Nav Bar options */}
             <Tab.Navigator
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ color, size }) => {
@@ -49,17 +66,16 @@ export default function MainTabNavigator() {
                 <Tab.Screen name="Profile" component={ProfileScreen} />
                 <Tab.Screen
                     name="Logout"
-                    component={HomeScreen} // Dummy to satisfy navigator
+                    component={HomeScreen}
                     listeners={{
                         tabPress: (e) => {
-                            e.preventDefault(); // ⛔ prevent navigation
-                            setLogoutModalVisible(true); // ✅ show confirmation
+                            e.preventDefault(); // Stops navigation
+                            setLogoutModalVisible(true); // Confirmation of logging out
                         },
                     }}
                 />
             </Tab.Navigator>
-
-            {/* 🔽 Logout Confirmation Modal */}
+            {/* Logout Confirmation Modal */}
             <Modal
                 transparent
                 visible={logoutModalVisible}
