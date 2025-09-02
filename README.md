@@ -172,7 +172,9 @@ npm test -- --coverage
 This will output a coverage summary in the console and a detailed report inside the coverage/ folder (including an interactive HTML version you can open in a browser).
 
 **Author:** Amelia Goldsby
+
 **Degree:** Level 6 QA - Major Project - A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+
 **Date:** 03/10/2025
 
 ## Acknowledgements
