@@ -1,9 +1,7 @@
 # Major Project: MyDrive App
 
 **Level:** 6  
-
 **Module:** Major Project
-
 **Assignment Name:** A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
 
 ---
@@ -26,6 +24,11 @@
 **MyDrive** is a mobile application designed to track journeys, monitor driving behavior, and provide users with safety scores and potential insurance discounts based on their driving patterns. The app integrates with mobile sensors, location tracking, and phone usage detection.
 
 This project is developed using **React Native** and **Expo**, and is intended to demonstrate Level 6 QA practices including functional testing, modular architecture, and user-centric design.
+
+The database has been initialised with 10 example users (1-10), and they can be accessed with the following credentials:
+**Username:** user1
+
+**Password:** Password1!
 
 ---
 
@@ -117,20 +120,19 @@ Open the project in Expo Go on your mobile device by scanning the QR code from t
 The project follows a standard React Native + Expo layout with organized folders for clarity.
 
 📂 project-root  
- ┣ 📂 app            # Entry point and navigation setup  
- ┣ 📂 assets         # Images utilised  
- ┣ 📂 components     # Reusable UI components (charts, tabs, etc.)  
- ┣ 📂 context        # Global state management (e.g., UserContext)  
- ┣ 📂 jest           # Mocks used for Jest unit tests  
- ┣ 📂 navigation     # Navigation stacks and tab navigators  
- ┣ 📂 screens        # Main app screens (HomeScreen, Settings, etc.)  
- ┣ 📂 services       # Telematics tracking (tracks key metrics for score calculations)  
- ┣ 📂 styles         # Centralized StyleSheet files for consistent styling  
- ┣ 📂 utils          # Helper functions (e.g., score calculation, journey history)  
- ┣ 📜 package.json   # Dependencies and scripts  
+ ┣ 📂 app # Entry point and navigation setup  
+ ┣ 📂 assets # Images utilised  
+ ┣ 📂 components # Reusable UI components (charts, tabs, etc.)  
+ ┣ 📂 context # Global state management (e.g., UserContext)  
+ ┣ 📂 jest # Mocks used for Jest unit tests  
+ ┣ 📂 navigation # Navigation stacks and tab navigators  
+ ┣ 📂 screens # Main app screens (HomeScreen, Settings, etc.)  
+ ┣ 📂 services # Telematics tracking (tracks key metrics for score calculations)  
+ ┣ 📂 styles # Centralized StyleSheet files for consistent styling  
+ ┣ 📂 utils # Helper functions (e.g., score calculation, journey history)  
+ ┣ 📜 package.json # Dependencies and scripts  
  ┣ 📜 requirements.txt # Requirements required to run the app  
- ┣ 📜 README.md      # Project documentation (this file)  
-
+ ┣ 📜 README.md # Project documentation (this file)
 
 ## Testing
 
@@ -139,10 +141,7 @@ The tests are written using **Jest** and **@testing-library/react-native**.
 
 ### Location of Tests
 
-- All test files are stored inside the `__tests__/` directory, following a structured format:
-  - **Screen tests** (e.g., `HomeScreen.test.js`)
-  - **Component tests** (e.g., `DoughnutChart.test.js`)
-  - **Utility function tests** (e.g., `utils.test.js`)
+- All test files are stored inside the `__tests__/` directory, following a structured format.
 
 ### Running the Tests
 
@@ -172,6 +171,10 @@ npm test -- --coverage
 
 This will output a coverage summary in the console and a detailed report inside the coverage/ folder (including an interactive HTML version you can open in a browser).
 
+**Author:** Amelia Goldsby
+**Degree:** Level 6 QA - Major Project - A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
+**Date:** 03/10/2025
+
 ## Acknowledgements
 
 This project was developed as part of the **Major Project (Level 6)** module with QA Higher Education.
@@ -181,9 +184,3 @@ I would like to acknowledge the following:
 - **QA Tutors & Supervisors** – for their guidance, feedback, and support throughout the project.
 - **Expo & React Native Communities** – for providing extensive documentation, open-source libraries, and forums that helped in solving development challenges.
 - **Third-Party Libraries** used in the project (React Navigation, Recharts, Safe Area Context, etc.) that enabled rapid development.
-
-**Author:** Amelia Goldsby
-
-**Degree:** Level 6 QA - Major Project - A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
-
-**Date:** 03/10/2025
