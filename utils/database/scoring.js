@@ -64,8 +64,8 @@ export const calculateScore = (journey) => {
         speed: Math.round(speedScore),
     };
 };
-// (Meng et al., 2021)
-// (Guillen, 2020)
+// (Kalra et al., 2021)
+// (Shirole et al., 2025)
 
 // Function to retrieve 30 day average score
 export const get30DayAverageScore = (journeys) => {
