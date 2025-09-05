@@ -60,7 +60,7 @@ function TrackingManager() {
   return null;
 }
 */
-// (Aboah, 2021)
+// (Aboah, 2022)
 
 export default function App() {
   useEffect(() => {
