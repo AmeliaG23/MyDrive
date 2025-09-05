@@ -19,7 +19,7 @@ import { UserProvider /*, UserContext */ } from "../context/UserContext";
 import RootNavigator from "../navigation/RootNavigator";
 
 // Import your sample data helpers
-import { addSampleData, testUsersExist } from "../utils/database";
+import { addSampleData } from "../utils/database";
 
 // NOTE: Tracking code is commented out because it won't work in Expo Go.
 // Uncomment when using a physical device with a custom dev build or production build.
@@ -66,16 +66,11 @@ export default function App() {
   useEffect(() => {
     const init = async () => {
       try {
-        const exists = await testUsersExist();
-        if (!exists) {
-          await addSampleData();
-        } else {
-        }
+        await addSampleData(); // always ensures 1–10 exist
       } catch (err) {
         console.error("Error initializing sample data:", err);
       }
     };
-
     init();
   }, []);
 
