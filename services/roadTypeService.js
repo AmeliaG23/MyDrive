@@ -35,7 +35,7 @@ export async function getRoadType(latitude, longitude) {
         return 'unknown';
     }
 }
-// (Nominatim, 2025)
+// (Nominatim, 2024)
 
 // Function to Normalize OpenStreetMap tags into smaller categories
 export function normalizeRoadType(osmType) {
