@@ -106,7 +106,6 @@ export default function HomeScreen() {
                             Welcome back to MyDrive, {user.firstName}
                         </Text>
                     )}
-
                     {showDiscountMessage && (
                         <TouchableOpacity
                             style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }}
@@ -119,7 +118,6 @@ export default function HomeScreen() {
                             <Ionicons name="information-circle-outline" size={20} color="#fff" />
                         </TouchableOpacity>
                     )}
-
                     {averageScore > 0 ? (
                         <>
                             <DoughnutChart score={averageScore} />
@@ -131,7 +129,6 @@ export default function HomeScreen() {
                         </Text>
                     )}
                 </View>
-
                 {/* Tabs */}
                 <Tab.Navigator
                     screenOptions={{
@@ -147,7 +144,6 @@ export default function HomeScreen() {
                         {() => <JourneysTab journeys={journeys} filter={filter} setFilter={setFilter} />}
                     </Tab.Screen>
                 </Tab.Navigator>
-
                 {/* Discount Modal */}
                 <Modal visible={showModal} transparent animationType="slide" onRequestClose={() => setShowModal(false)}>
                     <View style={HomeStyles.modalOverlay}>
