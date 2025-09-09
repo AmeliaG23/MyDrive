@@ -8,7 +8,7 @@
  *
  * Purpose:
  *    Main dashboard for users when logged in.
- *    Displays Doughnut chart with average 30 day score.
+ *    Displays Doughnut chart with average 30 day score or empty state if no scores.
  *    Displays discount message when user has driven 400 miles in the last 60 days.
  * 
  * (Rani et al., 2021)
@@ -62,11 +62,9 @@ export default function HomeScreen() {
                 return sum + score;
             }, 0);
 
-            // Sets average score
             const avgScore = recent30.length ? totalScore / recent30.length : 0;
             setAverageScore(Math.round(avgScore));
 
-            // Discount eligibility (>=400 miles last 60 days)
             const recent60 = history.filter(j => {
                 const daysAgo = (Date.now() - new Date(j.date).getTime()) / (1000 * 3600 * 24);
                 return daysAgo <= 60 && (j.distance || 0) > 0;
@@ -75,7 +73,6 @@ export default function HomeScreen() {
             const totalDistance = recent60.reduce((acc, j) => acc + (j.distance || 0), 0);
 
             if (totalDistance >= 400) {
-                // If eligible generates random discount code for user
                 setReferenceCode(prev => prev || uuid.v4().split('-')[0].toUpperCase() || 'REFCODE');
                 setShowDiscountMessage(true);
             } else {
@@ -86,35 +83,53 @@ export default function HomeScreen() {
         fetchJourneys();
     }, [user]);
 
-    // Function to handle phone number press
     const handleCallPress = () => Linking.openURL('tel:08001234567');
 
     return (
         <SafeAreaView style={{ flex: 1 }} edges={['bottom', 'left', 'right']}>
             <View style={{ flex: 1 }}>
-                <View style={[HomeStyles.topSection, { height: halfScreenHeight, backgroundColor: '#008080' }]}>
+                {/* Top Section */}
+                <View
+                    style={[
+                        HomeStyles.topSection,
+                        {
+                            minHeight: halfScreenHeight,
+                            backgroundColor: '#008080',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            paddingHorizontal: 16,
+                        },
+                    ]}
+                >
                     {user?.firstName && (
-                        <>
-                            <Text style={[HomeStyles.welcomeText, { color: '#fff' }]}>
-                                Welcome back to MyDrive, {user.firstName}
-                            </Text>
-                            {showDiscountMessage && (
-                                <TouchableOpacity
-                                    style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}
-                                    onPress={() => setShowModal(true)}
-                                    testID="discount-message"
-                                >
-                                    <Text style={{ color: '#fff', fontSize: 16, marginRight: 6 }}>
-                                        🎉 You are now eligible for your insurance discount
-                                    </Text>
-                                    <Ionicons name="information-circle-outline" size={20} color="#fff" />
-                                </TouchableOpacity>
-                            )}
-                        </>
+                        <Text style={[HomeStyles.welcomeText, { color: '#fff', marginBottom: 10 }]}>
+                            Welcome back to MyDrive, {user.firstName}
+                        </Text>
                     )}
-                    <DoughnutChart score={averageScore} />
-                    <Text style={[HomeStyles.topSectionText, { color: '#fff' }]}>30-Day Average</Text>
+                    {showDiscountMessage && (
+                        <TouchableOpacity
+                            style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }}
+                            onPress={() => setShowModal(true)}
+                            testID="discount-message"
+                        >
+                            <Text style={{ color: '#fff', fontSize: 16, marginRight: 6 }}>
+                                🎉 You are now eligible for your insurance discount
+                            </Text>
+                            <Ionicons name="information-circle-outline" size={20} color="#fff" />
+                        </TouchableOpacity>
+                    )}
+                    {averageScore > 0 ? (
+                        <>
+                            <DoughnutChart score={averageScore} />
+                            <Text style={[HomeStyles.topSectionText, { color: '#fff', marginTop: 8 }]}>30-Day Average</Text>
+                        </>
+                    ) : (
+                        <Text style={{ color: '#fff', fontSize: 16, textAlign: 'center' }}>
+                            No scores available yet – start driving to see your progress!
+                        </Text>
+                    )}
                 </View>
+                {/* Tabs */}
                 <Tab.Navigator
                     screenOptions={{
                         tabBarStyle: HomeStyles.tabBar,
@@ -122,10 +137,14 @@ export default function HomeScreen() {
                         tabBarIndicatorStyle: { backgroundColor: '#F9A800' },
                     }}
                 >
-                    <Tab.Screen name="Score">{() => <ScoreTab journeys={journeys.filter(j => j.scores?.total !== undefined)} />}</Tab.Screen>
-                    <Tab.Screen name="Journeys">{() => <JourneysTab journeys={journeys} filter={filter} setFilter={setFilter} />}</Tab.Screen>
+                    <Tab.Screen name="Score">
+                        {() => <ScoreTab journeys={journeys.filter(j => j.scores?.total !== undefined)} />}
+                    </Tab.Screen>
+                    <Tab.Screen name="Journeys">
+                        {() => <JourneysTab journeys={journeys} filter={filter} setFilter={setFilter} />}
+                    </Tab.Screen>
                 </Tab.Navigator>
-                {/* Modal for when discount is applicable */}
+                {/* Discount Modal */}
                 <Modal visible={showModal} transparent animationType="slide" onRequestClose={() => setShowModal(false)}>
                     <View style={HomeStyles.modalOverlay}>
                         <View style={HomeStyles.modalContent}>

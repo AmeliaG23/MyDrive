@@ -18,8 +18,9 @@ export async function getRoadType(latitude, longitude) {
         // Fetches road information from OpenStreetMap
         const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`;
         const response = await fetch(url, {
+            //Update headers with personal email
             headers: {
-                'User-Agent': 'MyDriveApp/1.0 (amelia.goldsby@gmail.com)', // Update with your info
+                'User-Agent': 'MyDriveApp/1.0 (amelia.goldsby@aviva.com)',
                 'Accept-Language': 'en'
             }
         });
