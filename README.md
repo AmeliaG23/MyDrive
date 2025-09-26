@@ -113,10 +113,6 @@ Open the project in Expo Go on your mobile device by scanning the QR code from t
   If you are testing on iOS, you must use **Xcode** to build and run the project on a physical device.  
   These features cannot be tested through Expo Go alone.
 
-- ⚠️ **Expo Go Compatibility**:  
-  This project was created before the release of **Expo Go 54**.  
-  If using newer versions, some functionality may not behave as expected without adjustments.
-
 ## Project Structure
 
 The project follows a standard React Native + Expo layout with organized folders for clarity.
