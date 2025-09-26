@@ -12,41 +12,49 @@
  * (Rani et al., 2021)
  */
 
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
+
+const screenHeight = Dimensions.get('window').height;
+const halfScreenHeight = screenHeight / 2;
 
 const HomeStyles = StyleSheet.create({
     topSection: {
+        minHeight: halfScreenHeight,
         backgroundColor: '#008080',
         justifyContent: 'center',
         alignItems: 'center',
+        paddingHorizontal: 16,
         paddingVertical: 20,
     },
-    chartContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    gauge: {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: [{ translateX: -165 }, { translateY: -30 }],
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-    },
-    scoreText: {
-        fontSize: 48,
-        fontWeight: 'bold',
-    },
-    outOfText: {
+    welcomeText: {
         fontSize: 20,
-        marginLeft: 2,
-        marginBottom: 6,
+        fontWeight: '600',
+        color: '#fff',
+        marginBottom: 10,
+        textAlign: 'center',
     },
     topSectionText: {
         marginTop: 15,
         fontSize: 20,
         fontWeight: '600',
         color: '#fff',
+        textAlign: 'center',
+    },
+    emptyStateText: {
+        color: '#fff',
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    discountMessageContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 15,
+    },
+    discountMessageText: {
+        color: '#fff',
+        fontSize: 16,
+        marginRight: 6,
+        textAlign: 'center',
     },
     tabBar: {
         backgroundColor: '#fff',
@@ -57,22 +65,6 @@ const HomeStyles = StyleSheet.create({
         fontWeight: '600',
         fontSize: 14,
         color: '#444',
-    },
-    welcomeText: {
-        fontSize: 20,
-        fontWeight: '600',
-        color: '#fff',
-        marginBottom: 10,
-    },
-    discountMessageContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    discountMessageText: {
-        color: '#fff',
-        fontSize: 16,
-        marginRight: 6,
     },
     modalOverlay: {
         flex: 1,
@@ -89,6 +81,11 @@ const HomeStyles = StyleSheet.create({
         maxWidth: 350,
         alignItems: 'center',
         elevation: 5,
+    },
+    modalCloseButton: {
+        position: 'absolute',
+        top: 15,
+        right: 15,
     },
     modalIcon: {
         alignSelf: 'center',
@@ -122,12 +119,6 @@ const HomeStyles = StyleSheet.create({
         fontWeight: '700',
         fontSize: 16,
         textAlign: 'center',
-    },
-    modalCloseButton: {
-        position: 'absolute',
-        top: 10,
-        right: 10,
-        zIndex: 10,
     },
 });
 

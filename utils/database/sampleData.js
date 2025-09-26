@@ -83,21 +83,29 @@ export const addSampleData = async () => {
 
     // Sample journey routes and road types
     const sampleRoadTypes = ['city', 'rural', 'highway'];
-    const sampleRoutes = [['start', 'mid1', 'mid2', 'end'], ['A', 'B', 'C', 'D'], ['X', 'Y', 'Z']];
+    const sampleRoutes = [
+        ['start', 'mid1', 'mid2', 'end'],
+        ['A', 'B', 'C', 'D'],
+        ['X', 'Y', 'Z']
+    ];
 
     for (const user of users) {
         const journeys = await getJourneyHistoryAsync(user.id);
         if (!Array.isArray(journeys) || journeys.length === 0) {
-            // Ensures there are 3 journeys within last 30 days
-            for (let j = 0; j < 3; j++) {
+            // Ensures there are at least 5 journeys within last 30 days
+            let totalRecentDistance = 0;
+            for (let j = 0; j < 5; j++) {
                 const date = new Date();
-                date.setDate(date.getDate() - Math.floor(Math.random() * 30)); // 0-29 days ago
+                date.setDate(date.getDate() - Math.floor(Math.random() * 30)); // 0–29 days ago
+
+                const distance = Math.floor(Math.random() * 100) + 50; // 50–150 miles
+                totalRecentDistance += distance;
 
                 const journey = {
                     id: generateUniqueId(),
                     date: date.toISOString().split('T')[0],
                     length: Math.floor(Math.random() * 60) + 10,
-                    distance: Math.floor(Math.random() * 100) + 5,
+                    distance,
                     speed: Math.floor(Math.random() * 100),
                     brakingAcceleration: +(Math.random() * 5).toFixed(2),
                     cornering: +(Math.random() * 4).toFixed(2),
@@ -107,12 +115,34 @@ export const addSampleData = async () => {
                     roadType: randomFromArray(sampleRoadTypes),
                 };
 
-                // Calculates scores for sample journeys
                 journey.scores = calculateScore(journey);
                 await addJourneyAsync(user.id, journey);
             }
 
-            // 5 journeys between 30 and ~240 days ago
+            // Guarantee threshold: if total under 400, add a top-up journey
+            if (totalRecentDistance < 400) {
+                const date = new Date();
+                date.setDate(date.getDate() - Math.floor(Math.random() * 30));
+
+                const journey = {
+                    id: generateUniqueId(),
+                    date: date.toISOString().split('T')[0],
+                    length: Math.floor(Math.random() * 120) + 60,
+                    distance: 400 - totalRecentDistance + 50, // push them over threshold
+                    speed: Math.floor(Math.random() * 100),
+                    brakingAcceleration: +(Math.random() * 5).toFixed(2),
+                    cornering: +(Math.random() * 4).toFixed(2),
+                    journeyRoute: randomFromArray(sampleRoutes),
+                    phoneUsage: Math.random() < 0.5,
+                    phoneCallStatus: Math.random() < 0.3,
+                    roadType: randomFromArray(sampleRoadTypes),
+                };
+
+                journey.scores = calculateScore(journey);
+                await addJourneyAsync(user.id, journey);
+            }
+
+            // Add 5 older journeys (30–240 days ago)
             for (let j = 0; j < 5; j++) {
                 const date = new Date();
                 const daysBack = Math.floor(Math.random() * (240 - 30)) + 30; // 30 to 240 days ago
@@ -138,13 +168,3 @@ export const addSampleData = async () => {
         }
     }
 };
-
-// Returns true if seeded test users already exist
-export const testUsersExist = async () => {
-    const users = await getAllUsers();
-    if (!Array.isArray(users) || users.length === 0) return false;
-
-    // Checks if users are already present
-    return users.some(u => u.username && u.username.startsWith("user"));
-};
-

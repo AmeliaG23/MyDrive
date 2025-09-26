@@ -12,8 +12,10 @@
  * (Rani et al., 2021)
  */
 
+export * from './discount';
 export * from './journeys';
 export * from './sampleData';
+export * from './scoreEligibility';
 export * from './scoring';
 export * from './users';
 

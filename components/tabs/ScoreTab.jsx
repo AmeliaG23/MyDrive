@@ -1,7 +1,7 @@
 /**
  * ScoreTab.jsx
  * ----------------
- * Created: 01-08-2025
+ * Created: 01-09-2025
  * Author: Amelia Goldsby
  * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
  * Course : Major Project, Level 6, QA
@@ -14,13 +14,12 @@
  * (Rani et al., 2021)
  */
 
-import { getScoreColor } from "@/utils";
+import { getScoreColor, scoreEligible } from "@/utils";
 import React from "react";
 import { ScrollView, Text, View } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import TabStyles from "../../styles/TabStyles";
 
-// Warning message function to display data specific reccomendations on how to improve their score
 const getWarningMessage = (score, category) => {
   if (score >= 80) return null;
   switch (category) {
@@ -37,7 +36,6 @@ const getWarningMessage = (score, category) => {
   }
 };
 
-// Simple horizontal bar visualizing score performance
 const ProgressBar = ({ score }) => (
   <View style={TabStyles.progressBar}>
     <View
@@ -49,7 +47,6 @@ const ProgressBar = ({ score }) => (
   </View>
 );
 
-// Displays a metric summary (miles, hours, trips)
 const SummaryCard = ({ iconName, label, value }) => (
   <View style={TabStyles.summaryCard}>
     <MaterialCommunityIcons name={iconName} size={28} color="#008080" />
@@ -59,15 +56,24 @@ const SummaryCard = ({ iconName, label, value }) => (
 );
 
 export default function ScoreTab({ journeys }) {
+  const eligible = scoreEligible(journeys, 400, 60);
+
+  if (!eligible || journeys.length === 0) {
+    return (
+      <View style={TabStyles.noDataContainer}>
+        <Text style={TabStyles.noDataText}>
+          No scores available – drive at least 400 miles over the last 60 days.
+        </Text>
+      </View>
+    );
+  }
+
   const now = Date.now();
   const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
-
-  // Filter journeys to include only those within the last 30 days
   const recentJourneys = journeys.filter(
     (j) => now - new Date(j.date).getTime() <= THIRTY_DAYS_MS
   );
 
-  // Message when no journeys are available
   if (recentJourneys.length === 0) {
     return (
       <View style={TabStyles.noDataContainer}>
@@ -78,10 +84,9 @@ export default function ScoreTab({ journeys }) {
     );
   }
 
-  // Compiles scores across journeys
   const averageScores = recentJourneys.reduce(
-    (acc, journey) => {
-      const scores = journey.scores || {};
+    (acc, j) => {
+      const scores = j.scores || {};
       acc.braking += scores.braking || 0;
       acc.cornering += scores.cornering || 0;
       acc.phoneDistraction += scores.phoneDistraction || 0;
@@ -91,7 +96,6 @@ export default function ScoreTab({ journeys }) {
     { braking: 0, cornering: 0, phoneDistraction: 0, speed: 0 }
   );
 
-  // Average for each category
   const count = recentJourneys.length;
   const avgBraking = Math.round(averageScores.braking / count);
   const avgCornering = Math.round(averageScores.cornering / count);
@@ -100,17 +104,16 @@ export default function ScoreTab({ journeys }) {
   );
   const avgSpeed = Math.round(averageScores.speed / count);
 
-  // Calculate total miles, hours and trips in last 30 days
   const totalDistanceMiles = recentJourneys.reduce(
     (acc, journey) => acc + parseFloat(journey.distance || 0),
     0
   );
-  const totalTimeHours = recentJourneys.reduce((acc, journey) => {
-    return acc + journey.length / 60; // convert minutes to hours
-  }, 0);
+  const totalTimeHours = recentJourneys.reduce(
+    (acc, journey) => acc + journey.length / 60,
+    0
+  );
   const totalTrips = recentJourneys.length;
 
-  // Card component to display score, progress bar, and messages
   const ScoreCard = ({ title, score, iconName }) => {
     const warning = getWarningMessage(score, title);
     return (
@@ -127,7 +130,6 @@ export default function ScoreTab({ journeys }) {
           </Text>
         </View>
         <ProgressBar score={score} />
-        {/* Only render a message if score < 80 */}
         {warning && (
           <View
             style={[

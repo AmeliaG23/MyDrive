@@ -78,7 +78,7 @@ describe('addSampleData', () => {
         expect(addUserAsync).toHaveBeenCalledTimes(9);
     });
 
-    it('adds journeys to users with no history', async () => {
+    it('adds journeys to users with no history and ensures 400 mile threshold is met', async () => {
         const mockUsers = Array.from({ length: 2 }, (_, i) => ({
             id: `${i + 1}`,
             username: `user${i + 1}`,
@@ -99,7 +99,13 @@ describe('addSampleData', () => {
 
         await addSampleData();
 
-        expect(addJourneyAsync).toHaveBeenCalledTimes(mockUsers.length * (3 + 5));
-        expect(calculateScore).toHaveBeenCalledTimes(mockUsers.length * (3 + 5));
+        const calls = addJourneyAsync.mock.calls.filter(call => call[0] === '1' || call[0] === '2');
+        expect(calls.length).toBeGreaterThanOrEqual(mockUsers.length * 8);
+        expect(calls.length).toBeLessThanOrEqual(mockUsers.length * 10);
+
+        expect(calculateScore).toHaveBeenCalledTimes(calls.length);
+
+        const distances = calls.map(c => c[1].distance);
+        expect(Math.max(...distances)).toBeGreaterThanOrEqual(50);
     });
 });

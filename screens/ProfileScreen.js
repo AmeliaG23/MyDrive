@@ -66,7 +66,9 @@ export default function ProfileScreen() {
                         <Text style={ProfileStyles.label} testID="label-last-name">Last Name</Text>
                         <Text style={ProfileStyles.value} testID="value-last-name">{userDetails.lastName}</Text>
                         <Text style={ProfileStyles.label} testID="label-dob">Date of Birth</Text>
-                        <Text style={ProfileStyles.value} testID="value-dob">{formatDate(userDetails.dob)}</Text>
+                        <Text style={ProfileStyles.value} testID="value-dob">
+                            {userDetails.dob ? formatDate(new Date(userDetails.dob)) : 'N/A'}
+                        </Text>
                         <Text style={ProfileStyles.label} testID="label-username">Username</Text>
                         <Text style={ProfileStyles.value} testID="value-username">{userDetails.username}</Text>
                     </>

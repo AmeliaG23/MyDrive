@@ -122,7 +122,7 @@ export default function TermsOnboardingScreen({ navigation }) {
                 </View>
                 <View style={OnboardingStyles.cardRow}>
                     <FontAwesome5 name="lightbulb" size={24} color="#008080" />
-                    <Text style={OnboardingStyles.cardText}>Offer personalized driving tips</Text>
+                    <Text style={OnboardingStyles.cardText}>Offer personalised driving tips</Text>
                 </View>
                 <View style={OnboardingStyles.cardRow}>
                     <FontAwesome5 name="clipboard-list" size={24} color="#008080" />
