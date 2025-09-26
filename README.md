@@ -88,9 +88,6 @@ Before running the project, make sure you have the following installed:
 - **Expo Go** app on your mobile device (for iOS or Android)
 - A code editor such as **VS Code**
 
-⚠️ Note: This project was built and tested before the release of **Expo Go 54**.  
-Later versions of Expo Go may show breaking changes.
-
 ### Running the App
 
 ```bash
@@ -100,8 +97,6 @@ yarn install
 ```
 
 Open the project in Expo Go on your mobile device by scanning the QR code from the terminal or Expo DevTools.
-
-⚠️ Warning: This project was built before the release of Expo Go 54. Some features may not behave as expected on newer versions.
 
 ## Notes & Warnings
 
