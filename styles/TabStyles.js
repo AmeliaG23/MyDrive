@@ -172,7 +172,6 @@ const TabStyles = StyleSheet.create({
         paddingVertical: 10,
         borderTopWidth: 1,
         borderTopColor: "#ccc",
-        backgroundColor: "#f9f9f9",
     },
     summaryCard: {
         flex: 1,

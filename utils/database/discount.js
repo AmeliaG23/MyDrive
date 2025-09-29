@@ -22,7 +22,7 @@ export function checkDiscountEligibility(history = []) {
         return { eligible: false, referenceCode: null };
     }
 
-    // Sort journeys oldest → newest
+    // Sort journeys oldest to newest
     const sortedJourneys = [...history].sort(
         (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
     );
@@ -33,7 +33,7 @@ export function checkDiscountEligibility(history = []) {
 
     const hasOneYear = daysSinceFirst >= 365;
 
-    // Count unique months that have scored journeys
+    // Count months that have scored journeys
     const months = new Set();
     history.forEach((j) => {
         if (j.scores?.total !== undefined) {

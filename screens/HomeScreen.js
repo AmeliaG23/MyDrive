@@ -1,7 +1,7 @@
 /**
  * HomeScreen.jsx
  * ----------------
- * Created: 01-09-2025
+ * Created: 01-08-2025
  * Author: Amelia Goldsby
  * Purpose:
  *    Main dashboard for users when logged in.
@@ -73,11 +73,18 @@ export default function HomeScreen() {
                 setAverageScore(0);
             }
 
-            // Discount eligibility check (optional)
+            // Discount eligibility check
             const { eligible: discountEligible, referenceCode } = checkDiscountEligibility(history);
             setReferenceCode(discountEligible ? referenceCode : null);
-            setShowDiscountMessage(discountEligible);
+
+            if (discountEligible) {
+                // Delay showing modal by 2 seconds
+                setTimeout(() => {
+                    setShowModal(true);
+                }, 3000);
+            }
         }
+
         fetchJourneys();
     }, [user]);
 
@@ -109,22 +116,6 @@ export default function HomeScreen() {
                             Welcome back to MyDrive, {user.firstName}
                         </Text>
                     )}
-                    {showDiscountMessage && (
-                        <TouchableOpacity
-                            style={HomeStyles.discountMessageContainer}
-                            onPress={() => setShowModal(true)}
-                            testID="discount-message"
-                        >
-                            <Text style={HomeStyles.discountMessageText}>
-                                🎉 You are now eligible for your insurance discount
-                            </Text>
-                            <Ionicons
-                                name="information-circle-outline"
-                                size={20}
-                                color="#fff"
-                            />
-                        </TouchableOpacity>
-                    )}
                     {eligibleForDisplay && averageScore > 0 ? (
                         <>
                             <DoughnutChart score={averageScore} />
@@ -143,7 +134,6 @@ export default function HomeScreen() {
                         </Text>
                     )}
                 </View>
-
                 {/* Tabs */}
                 <Tab.Navigator
                     screenOptions={{
@@ -167,7 +157,6 @@ export default function HomeScreen() {
                         )}
                     </Tab.Screen>
                 </Tab.Navigator>
-
                 {/* Discount Modal */}
                 <Modal
                     visible={showModal}

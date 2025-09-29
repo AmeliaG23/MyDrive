@@ -45,17 +45,6 @@ const HomeStyles = StyleSheet.create({
         fontSize: 16,
         textAlign: 'center',
     },
-    discountMessageContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 15,
-    },
-    discountMessageText: {
-        color: '#fff',
-        fontSize: 16,
-        marginRight: 6,
-        textAlign: 'center',
-    },
     tabBar: {
         backgroundColor: '#fff',
         elevation: 4,

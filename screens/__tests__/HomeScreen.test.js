@@ -13,7 +13,7 @@
  */
 
 import * as utils from "@/utils";
-import { fireEvent, render, waitFor } from "@testing-library/react-native";
+import { act, render, waitFor } from "@testing-library/react-native";
 import React from "react";
 import { UserContext } from "../../context/UserContext";
 import HomeScreen from "../HomeScreen";
@@ -49,6 +49,12 @@ describe("HomeScreen", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         utils.calculateScore.mockImplementation(() => ({ total: 50 }));
+        jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+        jest.runOnlyPendingTimers();
+        jest.useRealTimers();
     });
 
     test("does not fetch journeys if user id missing", async () => {
@@ -101,23 +107,32 @@ describe("HomeScreen", () => {
         });
     });
 
-    test("shows discount modal when eligible", async () => {
+    test("automatically shows discount modal when eligible", async () => {
         const user = { id: "user3", firstName: "Charlie" };
         utils.getJourneyHistoryAsync.mockResolvedValue(mockJourneysOverThreshold);
         utils.scoreEligible.mockReturnValue(true);
         utils.checkDiscountEligibility.mockReturnValue({ eligible: true, referenceCode: "TESTCODE2" });
 
-        const { getByText, getByTestId } = render(
+        const { getByText, queryByText } = render(
             <UserContext.Provider value={{ user }}>
                 <HomeScreen />
             </UserContext.Provider>
         );
 
-        const discountBanner = await waitFor(() => getByTestId("discount-message"));
-        expect(discountBanner).toBeTruthy();
+        // Initially modal should not be visible
+        expect(queryByText(/Congratulations!/)).toBeNull();
 
-        fireEvent.press(discountBanner);
+        // Wait for useEffect async operations
+        await waitFor(() => {
+            expect(utils.getJourneyHistoryAsync).toHaveBeenCalledWith(user.id);
+        });
 
+        // Run the modal timeout inside act
+        await act(async () => {
+            jest.runAllTimers();
+        });
+
+        // Now modal should be visible
         await waitFor(() => {
             expect(getByText(/Congratulations!/)).toBeTruthy();
             expect(getByText(/0800 123 4567/)).toBeTruthy();
@@ -125,20 +140,22 @@ describe("HomeScreen", () => {
         });
     });
 
-    test("does not show discount banner when not eligible", async () => {
+    test("does not show discount modal when not eligible", async () => {
         const user = { id: "user4", firstName: "Dana" };
         utils.getJourneyHistoryAsync.mockResolvedValue(mockJourneysBelowThreshold);
         utils.scoreEligible.mockReturnValue(false);
         utils.checkDiscountEligibility.mockReturnValue({ eligible: false, referenceCode: null });
 
-        const { queryByTestId } = render(
+        const { queryByText } = render(
             <UserContext.Provider value={{ user }}>
                 <HomeScreen />
             </UserContext.Provider>
         );
 
+        jest.runAllTimers();
+
         await waitFor(() => {
-            expect(queryByTestId("discount-message")).toBeNull();
+            expect(queryByText(/Congratulations!/)).toBeNull();
         });
     });
 });

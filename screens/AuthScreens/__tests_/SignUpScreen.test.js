@@ -93,10 +93,4 @@ describe('SignUpScreen', () => {
             expect(Alert.alert).toHaveBeenCalledWith('Error', 'Failed to create account.');
         });
     });
-
-    it('calls goBack on back button press', async () => {
-        const screen = render(<SignUpScreen navigation={mockNavigation} />);
-        fireEvent.press(screen.getByText('Back'));
-        expect(mockNavigation.goBack).toHaveBeenCalled();
-    });
 });

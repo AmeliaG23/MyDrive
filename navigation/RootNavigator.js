@@ -7,7 +7,7 @@
  * Course : Major Project, Level 6, QA
  *
  * Purpose:
- *    Root navigator which lays out the screens for multiple scenrios:
+ *    Root navigator which lays out the screens for multiple scenarios:
  *      - Signed in or not
  *      - Onboarded or not
  *
@@ -15,18 +15,29 @@
  */
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StatusBar } from 'expo-status-bar';
 import React, { useContext } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { UserContext } from '../context/UserContext';
 import LoginScreen from '../screens/AuthScreens/LoginScreen';
 import SignupScreen from '../screens/AuthScreens/SignUpScreen';
-import JourneyScreen from '../screens/JourneyScreen'; // import JourneyScreen here
+import JourneyScreen from '../screens/JourneyScreen';
 import TermsOnboardingScreen from '../screens/Onboarding/TermsOnboardingScreen';
 import WelcomeOnboardingScreen from '../screens/Onboarding/WelcomeOnboardingScreen';
 import MainTabNavigator from './MainTabNavigator';
 
 const Stack = createNativeStackNavigator();
+
+// Reusable options to avoid repetition
+const noTitleOptions = {
+    headerShown: true,
+    title: '',
+};
+
+const hiddenHeaderOptions = {
+    headerShown: false,
+};
 
 export default function RootNavigator() {
     const { user, onboarded } = useContext(UserContext);
@@ -40,40 +51,57 @@ export default function RootNavigator() {
         );
     }
 
-    let screens;
+    const getAuthScreens = () => (
+        <>
+            {/* User not logged in */}
+            <Stack.Screen name="Login" component={LoginScreen} options={noTitleOptions} />
+            <Stack.Screen name="Signup" component={SignupScreen} options={noTitleOptions} />
+        </>
+    );
 
-    if (!user) {
-        // User not logged in
-        screens = (
-            <>
-                <Stack.Screen name="Login" component={LoginScreen} />
-                <Stack.Screen name="Signup" component={SignupScreen} />
-            </>
-        );
-    } else if (onboarded === false) {
-        // User logged in but not onboarded
-        screens = (
-            <>
-                <Stack.Screen name="WelcomeOnboarding" component={WelcomeOnboardingScreen} />
-                <Stack.Screen name="TermsOnboarding" component={TermsOnboardingScreen} />
-                <Stack.Screen name="MainTabs" component={MainTabNavigator} />
-                <Stack.Screen name="JourneyScreen" component={JourneyScreen} />
-            </>
-        );
-    } else {
-        // User logged in and onboarded
-        screens = (
-            <>
-                <Stack.Screen name="MainTabs" component={MainTabNavigator} />
-                <Stack.Screen name="JourneyScreen" component={JourneyScreen} />
-            </>
-        );
-    }
+    const getOnboardingScreens = () => (
+        <>
+            {/* User logged in but not onboarded */}
+            <Stack.Screen name="WelcomeOnboarding" component={WelcomeOnboardingScreen} options={noTitleOptions} />
+            <Stack.Screen
+                name="TermsOnboarding"
+                component={TermsOnboardingScreen}
+                options={{
+                    ...noTitleOptions,
+                    headerBackTitleVisible: false, //  back button shows icon only
+                }}
+            />
+            <Stack.Screen name="MainTabs" component={MainTabNavigator} options={hiddenHeaderOptions} />
+            <Stack.Screen name="JourneyScreen" component={JourneyScreen} />
+        </>
+    );
+
+    const getMainScreens = () => (
+        <>
+            {/* User logged in and onboarded */}
+            <Stack.Screen name="MainTabs" component={MainTabNavigator} options={hiddenHeaderOptions} />
+            <Stack.Screen name="JourneyScreen" component={JourneyScreen} />
+        </>
+    );
 
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {screens}
-        </Stack.Navigator>
+        <View style={{ flex: 1, backgroundColor: '#000' }}>
+            {/* Expo Status Bar - consistent across all devices */}
+            <StatusBar style="dark" backgroundColor='#000' />
+            <Stack.Navigator
+                screenOptions={{
+                    headerShown: true,
+                    headerTintColor: '#008080', // text & back button/icon colour
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                    },
+                }}
+            >
+                {!user && getAuthScreens()}
+                {user && onboarded === false && getOnboardingScreens()}
+                {user && onboarded && getMainScreens()}
+            </Stack.Navigator>
+        </View>
     );
 }
 

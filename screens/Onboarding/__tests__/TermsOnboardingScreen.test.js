@@ -31,7 +31,6 @@ describe('TermsOnboardingScreen', () => {
         reset: jest.fn(),
     };
 
-    // Suppress Icon warnings safely
     beforeAll(() => {
         const originalConsoleError = console.error;
         jest.spyOn(console, 'error').mockImplementation((msg, ...args) => {
@@ -108,14 +107,12 @@ describe('TermsOnboardingScreen', () => {
         mockSetOnboarded.mockRejectedValue(new Error('fail'));
         Location.requestForegroundPermissionsAsync.mockResolvedValue({ status: 'granted' });
 
-        const { getByTestId } = renderScreen();
+        const { getByTestId, getByText } = renderScreen();
 
         const checkbox = getByTestId('consent-checkbox');
-        fireEvent(checkbox, 'onValueChange', true);
 
-        await act(async () => {
-            fireEvent.press(getByTestId('continueButton'));
-        });
+        fireEvent(checkbox, 'onValueChange', true);
+        fireEvent.press(getByText('Continue'));
 
         await waitFor(() => {
             expect(Alert.alert).toHaveBeenCalledWith(
@@ -123,13 +120,5 @@ describe('TermsOnboardingScreen', () => {
                 'Something went wrong. Please try again.'
             );
         });
-    });
-
-    it('back arrow calls navigation.goBack', () => {
-        const { getByTestId } = renderScreen();
-
-        fireEvent.press(getByTestId('backButton'));
-
-        expect(mockNavigation.goBack).toHaveBeenCalled();
     });
 });

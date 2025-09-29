@@ -15,7 +15,6 @@
  */
 
 import { formatDate } from '@/utils';
-import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
 import {
@@ -120,7 +119,7 @@ export default function SignUpScreen({ navigation }) {
 
     return (
         <KeyboardAvoidingView
-            style={{ flex: 1, backgroundColor: '#f9f9f9' }}
+            style={{ flex: 1, backgroundColor: '#fff' }}
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
         >
@@ -203,17 +202,6 @@ export default function SignUpScreen({ navigation }) {
                         />
                         <TouchableOpacity style={AuthStyles.button} onPress={handleSignUp}>
                             <Text style={AuthStyles.buttonText}>Sign Up</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => navigation.goBack()}
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                padding: 10,
-                            }}
-                        >
-                            <Ionicons name="arrow-back" size={24} color="#008080" />
-                            <Text style={AuthStyles.secondButtonText}>Back</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

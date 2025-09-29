@@ -1,7 +1,7 @@
 /**
  * TermsOnboardingScreen.jsx
  * ----------------
- * Created: 01-09-2025
+ * Created: 01-08-2025
  * Author: Amelia Goldsby
  * Project : A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
  * Course : Major Project, Level 6, QA
@@ -74,13 +74,6 @@ export default function TermsOnboardingScreen({ navigation }) {
                 contentContainerStyle={{ paddingBottom: 40 }}
                 showsVerticalScrollIndicator={false}
             >
-                <TouchableOpacity
-                    onPress={() => navigation.goBack()}
-                    style={{ position: 'absolute', top: 50, left: 20, zIndex: 10 }}
-                    testID="backButton"
-                >
-                    <Ionicons name="arrow-back" size={24} color="#008080" />
-                </TouchableOpacity>
                 <Image
                     source={require('../../assets/aviva-logo.png')}
                     style={OnboardingStyles.logo}

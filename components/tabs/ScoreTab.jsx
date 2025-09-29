@@ -74,16 +74,6 @@ export default function ScoreTab({ journeys }) {
     (j) => now - new Date(j.date).getTime() <= THIRTY_DAYS_MS
   );
 
-  if (recentJourneys.length === 0) {
-    return (
-      <View style={TabStyles.noDataContainer}>
-        <Text style={TabStyles.noDataText}>
-          No journeys in the last 30 days.
-        </Text>
-      </View>
-    );
-  }
-
   const averageScores = recentJourneys.reduce(
     (acc, j) => {
       const scores = j.scores || {};

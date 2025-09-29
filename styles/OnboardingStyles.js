@@ -20,7 +20,6 @@ const OnboardingStyles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#ffffff',
-        paddingTop: 50,
         paddingHorizontal: 20,
     },
     scrollContent: {

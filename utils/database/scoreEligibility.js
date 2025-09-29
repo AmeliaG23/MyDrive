@@ -17,7 +17,9 @@ export function scoreEligible(journeys) {
     const sixtyDaysAgo = now - 60 * 24 * 60 * 60 * 1000;
 
     const recentJourneys = journeys.filter(j => new Date(j.date).getTime() >= sixtyDaysAgo);
+    // Sum the distance of all recent journeys over past 60 days
     const totalDistance = recentJourneys.reduce((sum, j) => sum + (j.distance || 0), 0);
 
+    // only true if distance in the past 60 days is 400 miles or over
     return totalDistance >= 400;
 }
