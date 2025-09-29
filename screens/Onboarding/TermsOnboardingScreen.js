@@ -82,7 +82,7 @@ export default function TermsOnboardingScreen({ navigation }) {
                 <Text style={OnboardingStyles.title}>Data Consent & Permissions</Text>
                 <Text style={OnboardingStyles.description}>
                     To provide accurate driving feedback and calculate your safety score, we
-                    collect and process the following data while you are driving:
+                    collect and process your telematics data while you are driving.
                 </Text>
                 <View style={OnboardingStyles.iconContainer}>
                     <FontAwesome5 name="car" size={80} color="#008080" />
@@ -97,7 +97,7 @@ export default function TermsOnboardingScreen({ navigation }) {
                 <View style={OnboardingStyles.cardRow}>
                     <Ionicons name="location-outline" size={24} color="#008080" />
                     <Text style={OnboardingStyles.cardText}>
-                        GPS location: map journey and speed
+                        GPS location: journey and speed
                     </Text>
                 </View>
                 <View style={OnboardingStyles.cardRow}>
