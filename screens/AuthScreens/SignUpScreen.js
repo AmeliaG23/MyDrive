@@ -54,9 +54,9 @@ export default function SignUpScreen({ navigation }) {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [dob, setDob] = useState(isTest ? new Date('2000-01-01') : null);
+    const [dob, setDob] = useState(isTest ? new Date('2000-01-01') : new Date());
     const [formattedDob, setFormattedDob] = useState(
-        isTest ? '01/01/2000' : ''
+        isTest ? '01/01/2000' : formatDate(new Date())
     );
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [passwordStrength, setPasswordStrength] = useState(getPasswordStrength(''));

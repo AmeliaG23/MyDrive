@@ -110,13 +110,6 @@ export default function JourneyScreen({ route, navigation }) {
     return (
         <View style={JourneyStyles.screenWrapper}>
             <View style={JourneyStyles.header}>
-                <TouchableOpacity
-                    onPress={() => navigation.goBack()}
-                    style={JourneyStyles.backButton}
-                    testID="backButton"
-                >
-                    <MaterialCommunityIcons name="arrow-left" size={28} color="white" />
-                </TouchableOpacity>
             </View>
             <View style={JourneyStyles.topSection}>
                 <Text style={JourneyStyles.title}>

@@ -68,11 +68,14 @@ export default function RootNavigator() {
                 component={TermsOnboardingScreen}
                 options={{
                     ...noTitleOptions,
-                    headerBackTitleVisible: false, //  back button shows icon only
+                    headerBackTitle: 'Back'
                 }}
             />
             <Stack.Screen name="MainTabs" component={MainTabNavigator} options={hiddenHeaderOptions} />
-            <Stack.Screen name="JourneyScreen" component={JourneyScreen} />
+            <Stack.Screen name="JourneyScreen" component={JourneyScreen} options={{
+                ...noTitleOptions,
+                headerBackTitle: 'Back'
+            }} />
         </>
     );
 
@@ -80,7 +83,10 @@ export default function RootNavigator() {
         <>
             {/* User logged in and onboarded */}
             <Stack.Screen name="MainTabs" component={MainTabNavigator} options={hiddenHeaderOptions} />
-            <Stack.Screen name="JourneyScreen" component={JourneyScreen} />
+            <Stack.Screen name="JourneyScreen" component={JourneyScreen} options={{
+                ...noTitleOptions,
+                headerBackTitle: 'Back'
+            }} />
         </>
     );
 
@@ -91,7 +97,7 @@ export default function RootNavigator() {
             <Stack.Navigator
                 screenOptions={{
                     headerShown: true,
-                    headerTintColor: '#008080', // text & back button/icon colour
+                    headerTintColor: '#008080',
                     headerTitleStyle: {
                         fontWeight: 'bold',
                     },

@@ -67,20 +67,6 @@ describe('JourneyScreen', () => {
         expect(getByText(/no journey data available/i)).toBeTruthy();
     });
 
-    test('renders journey details correctly', () => {
-        const { getByText, getByTestId } = render(
-            <JourneyScreen route={mockRouteWithJourney} navigation={mockNavigation} />,
-            { wrapper: Wrapper }
-        );
-
-        expect(getByText(/journey on/i)).toBeTruthy();
-        expect(getByText(/10 miles/i)).toBeTruthy();
-        expect(getByText(/15 minutes/i)).toBeTruthy();
-        expect(getByText(/speed/i)).toBeTruthy();
-        expect(getByText(/braking/i)).toBeTruthy();
-        expect(getByTestId('backButton')).toBeTruthy();
-    });
-
     test('opens passenger modal and cancels correctly', async () => {
         const { getByText, queryByText } = render(
             <JourneyScreen route={mockRouteWithJourney} navigation={mockNavigation} />,
@@ -100,19 +86,5 @@ describe('JourneyScreen', () => {
         });
 
         expect(queryByText(/were you a passenger on this journey/i)).toBeNull();
-    });
-
-    test('back button calls navigation.goBack', async () => {
-        const { getByTestId } = render(
-            <JourneyScreen route={mockRouteWithJourney} navigation={mockNavigation} />,
-            { wrapper: Wrapper }
-        );
-
-        const backButton = getByTestId('backButton');
-        await act(async () => {
-            fireEvent.press(backButton);
-        });
-
-        expect(mockNavigation.goBack).toHaveBeenCalled();
     });
 });

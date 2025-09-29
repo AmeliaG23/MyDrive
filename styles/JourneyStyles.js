@@ -23,10 +23,7 @@ const JourneyStyles = StyleSheet.create({
     header: {
         alignItems: 'flex-start',
         backgroundColor: '#008080',
-    },
-    backButton: {
-        padding: 8,
-        color: 'white'
+        paddingTop: 15,
     },
     title: {
         fontSize: 22,
