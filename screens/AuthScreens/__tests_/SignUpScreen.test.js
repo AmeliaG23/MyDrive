@@ -30,13 +30,12 @@ describe('SignUpScreen', () => {
     const fillValidForm = (screen, overrides = {}) => {
         const dobDate = overrides.dob ? new Date(overrides.dob) : new Date('2000-01-01');
 
-        fireEvent.changeText(screen.getByPlaceholderText('First Name'), overrides.firstName || 'Jane');
-        fireEvent.changeText(screen.getByPlaceholderText('Last Name'), overrides.lastName || 'Doe');
-        fireEvent.changeText(screen.getByPlaceholderText('Username'), overrides.username || 'janedoe123');
-        fireEvent.changeText(screen.getByPlaceholderText('Password'), overrides.password || 'StrongP@ss1');
-        fireEvent.changeText(screen.getByPlaceholderText('Confirm Password'), overrides.confirmPassword || 'StrongP@ss1');
+        fireEvent.changeText(screen.getByPlaceholderText('Enter first name'), overrides.firstName || 'Jane');
+        fireEvent.changeText(screen.getByPlaceholderText('Enter last name'), overrides.lastName || 'Doe');
+        fireEvent.changeText(screen.getByPlaceholderText('Enter username'), overrides.username || 'janedoe123');
+        fireEvent.changeText(screen.getByPlaceholderText('Enter password'), overrides.password || 'StrongP@ss1');
+        fireEvent.changeText(screen.getByPlaceholderText('Re-enter password'), overrides.confirmPassword || 'StrongP@ss1');
 
-        // directly set dob and formattedDob state
         act(() => {
             screen.update(<SignUpScreen navigation={mockNavigation} testDob={dobDate} />);
         });

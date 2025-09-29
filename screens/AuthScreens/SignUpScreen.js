@@ -61,6 +61,7 @@ export default function SignUpScreen({ navigation }) {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [passwordStrength, setPasswordStrength] = useState(getPasswordStrength(''));
 
+    // Handles sign up process and validation
     const handleSignUp = async () => {
         if (!firstName || !lastName || !formattedDob || !username || !password || !confirmPassword) {
             Alert.alert('Error', 'Please fill out all fields.');
@@ -94,7 +95,7 @@ export default function SignUpScreen({ navigation }) {
                 password,
                 firstName,
                 lastName,
-                dob: dob.toISOString(), // store proper ISO date
+                dob: dob.toISOString(),
             });
 
             if (!success) {
@@ -109,6 +110,7 @@ export default function SignUpScreen({ navigation }) {
         }
     };
 
+    // Handles date picker selection
     const onChangeDate = (event, selectedDate) => {
         setShowDatePicker(false);
         if (event.type === 'set' && selectedDate) {
@@ -127,26 +129,32 @@ export default function SignUpScreen({ navigation }) {
                 contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', padding: 20 }}
                 keyboardShouldPersistTaps="handled"
             >
-                <View style={[AuthStyles.container]}>
+                <View style={AuthStyles.container}>
                     <Image source={require('../../assets/aviva-logo.png')} style={AuthStyles.logo} />
                     <View style={[AuthStyles.formContainer, { backgroundColor: '#fff', borderRadius: 10, padding: 20 }]}>
+                        {/* First Name */}
+                        <Text style={AuthStyles.label}>First Name</Text>
                         <TextInput
                             style={AuthStyles.input}
-                            placeholder="First Name"
+                            placeholder="Enter first name"
                             value={firstName}
                             onChangeText={setFirstName}
                         />
+                        {/* Last Name */}
+                        <Text style={AuthStyles.label}>Last Name</Text>
                         <TextInput
                             style={AuthStyles.input}
-                            placeholder="Last Name"
+                            placeholder="Enter last name"
                             value={lastName}
                             onChangeText={setLastName}
                         />
+                        {/* Date of Birth */}
+                        <Text style={AuthStyles.label}>Date of Birth</Text>
                         <TouchableOpacity onPress={() => setShowDatePicker(true)}>
                             <TextInput
                                 testID="dob-input"
                                 style={AuthStyles.input}
-                                placeholder="Date of Birth (DD/MM/YYYY)"
+                                placeholder="DD/MM/YYYY"
                                 value={formattedDob}
                                 editable={false}
                                 pointerEvents="none"
@@ -155,22 +163,26 @@ export default function SignUpScreen({ navigation }) {
                         {showDatePicker && !isTest && (
                             <DateTimePicker
                                 testID="dob-picker"
-                                value={dob}
+                                value={dob || new Date()} // ensure valid Date
                                 mode="date"
                                 display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                                 onChange={onChangeDate}
                                 maximumDate={new Date()}
                             />
                         )}
+                        {/* Username */}
+                        <Text style={AuthStyles.label}>Username</Text>
                         <TextInput
                             style={AuthStyles.input}
-                            placeholder="Username"
+                            placeholder="Enter username"
                             value={username}
                             onChangeText={setUsername}
                         />
+                        {/* Password */}
+                        <Text style={AuthStyles.label}>Password</Text>
                         <TextInput
                             style={AuthStyles.input}
-                            placeholder="Password"
+                            placeholder="Enter password"
                             secureTextEntry
                             value={password}
                             onChangeText={(text) => {
@@ -178,6 +190,7 @@ export default function SignUpScreen({ navigation }) {
                                 setPasswordStrength(getPasswordStrength(text));
                             }}
                         />
+                        {/* Password Strength */}
                         <View style={{ marginBottom: 10 }}>
                             <View style={{ height: 6, backgroundColor: '#ccc', borderRadius: 3 }}>
                                 <View
@@ -193,16 +206,20 @@ export default function SignUpScreen({ navigation }) {
                                 Strength: {passwordStrength.label}
                             </Text>
                         </View>
+                        {/* Confirm Password */}
+                        <Text style={AuthStyles.label}>Confirm Password</Text>
                         <TextInput
                             style={AuthStyles.input}
-                            placeholder="Confirm Password"
+                            placeholder="Re-enter password"
                             secureTextEntry
                             value={confirmPassword}
                             onChangeText={setConfirmPassword}
                         />
+                        {/* Sign Up Button */}
                         <TouchableOpacity style={AuthStyles.button} onPress={handleSignUp}>
                             <Text style={AuthStyles.buttonText}>Sign Up</Text>
                         </TouchableOpacity>
+
                     </View>
                 </View>
             </ScrollView>
