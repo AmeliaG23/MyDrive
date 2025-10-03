@@ -12,29 +12,29 @@
  * (Rani et al., 2021)
  */
 
-import { getRoadType, normalizeRoadType } from '../roadTypeService';
+import { getRoadType, normaliseRoadType } from '../roadTypeService';
 
 global.fetch = jest.fn();
 
-describe('normalizeRoadType', () => {
+describe('normaliseRoadType', () => {
     it('returns highway for motorway', () => {
-        expect(normalizeRoadType('motorway')).toBe('highway');
+        expect(normaliseRoadType('motorway')).toBe('highway');
     });
 
     it('returns city for residential', () => {
-        expect(normalizeRoadType('residential')).toBe('city');
+        expect(normaliseRoadType('residential')).toBe('city');
     });
 
     it('returns rural for track', () => {
-        expect(normalizeRoadType('track')).toBe('rural');
+        expect(normaliseRoadType('track')).toBe('rural');
     });
 
     it('returns unknown for null', () => {
-        expect(normalizeRoadType(null)).toBe('unknown');
+        expect(normaliseRoadType(null)).toBe('unknown');
     });
 
-    it('returns unknown for unrecognized type', () => {
-        expect(normalizeRoadType('runway')).toBe('unknown');
+    it('returns unknown for unrecognised type', () => {
+        expect(normaliseRoadType('runway')).toBe('unknown');
     });
 });
 
@@ -43,7 +43,7 @@ describe('getRoadType', () => {
         jest.clearAllMocks();
     });
 
-    it('returns normalized road type from OSM response', async () => {
+    it('returns normalised road type from OSM response', async () => {
         const fakeResponse = {
             address: {
                 highway: 'residential',

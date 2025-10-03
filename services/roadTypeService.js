@@ -29,8 +29,8 @@ export async function getRoadType(latitude, longitude) {
 
         const osmType = data?.address?.highway || 'unknown';
 
-        // Normalize to broad categories (highway, city, rural, unknown)
-        return normalizeRoadType(osmType);
+        // Normalise to broad categories (highway, city, rural, unknown)
+        return normaliseRoadType(osmType);
     } catch (error) {
         console.error('RoadType API error:', error);
         return 'unknown';
@@ -38,8 +38,8 @@ export async function getRoadType(latitude, longitude) {
 }
 // (Nominatim, 2024)
 
-// Function to Normalize OpenStreetMap tags into smaller categories
-export function normalizeRoadType(osmType) {
+// Function to Normalise OpenStreetMap tags into smaller categories
+export function normaliseRoadType(osmType) {
     if (!osmType) return 'unknown';
 
     const highway = osmType.toLowerCase();

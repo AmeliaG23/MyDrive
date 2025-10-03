@@ -34,7 +34,7 @@ describe('calculateScore', () => {
         expect(result.speed).toBe(100);
     });
 
-    test('penalizes phone usage and calls correctly', () => {
+    test('penalises phone usage and calls correctly', () => {
         const journey = {
             brakingAcceleration: 1,
             cornering: 1,

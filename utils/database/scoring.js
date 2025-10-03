@@ -15,7 +15,7 @@
 // Function to calculate journey score with telematics data
 export const calculateScore = (journey) => {
     // Maps score to be between 0-100
-    const normalize = (value, min, max) =>
+    const normalise = (value, min, max) =>
         Math.min(100, Math.max(0, ((max - value) / (max - min)) * 100));
 
     // Road type weighting- cities penalised
@@ -24,13 +24,13 @@ export const calculateScore = (journey) => {
     // Braking score- harsh braking penalised
     const brakingScore = Math.max(
         0,
-        100 - normalize(journey.brakingAcceleration, 0, 5) * 5 * roadTypeWeight
+        100 - normalise(journey.brakingAcceleration, 0, 5) * 5 * roadTypeWeight
     );
 
     // Cornering score- sharp cornering penalised
     const corneringScore = Math.max(
         0,
-        100 - normalize(journey.cornering, 0, 4) * 4 * roadTypeWeight
+        100 - normalise(journey.cornering, 0, 4) * 4 * roadTypeWeight
     );
 
     // Speed score- average speed over 60 penalised
