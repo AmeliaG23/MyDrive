@@ -6,8 +6,6 @@
 
 **Assignment Name:** A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
 
----
-
 ## Table of Contents
 
 - [Project Overview](#project-overview)
