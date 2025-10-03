@@ -23,7 +23,7 @@
 
 ## Project Overview
 
-**MyDrive** is a mobile application designed to track journeys, monitor driving behavior, and provide users with safety scores and potential insurance discounts based on their driving patterns. The app integrates with mobile sensors, location tracking, and phone usage detection.
+**MyDrive** is a POC mobile application designed to track journeys, monitor driving behavior, and provide users with safety scores and potential insurance discounts based on their driving patterns.
 
 This project is developed using **React Native** and **Expo**, and is intended to demonstrate Level 6 QA practices including functional testing, modular architecture, and user-centric design.
 
@@ -44,12 +44,12 @@ The database has been initialised with 10 example users (1-10), and they can be 
 
 2. **Safety Scoring System**
 
-   - Computes a 30-day average safety score based on recorded journeys.
-   - Provides actionable feedback to improve driving behavior.
+   - Calculates a 30-day average safety score based on recorded journeys.
+   - Provides feedback to improve driving behavior.
 
 3. **Car Insurance Discount Eligibility**
 
-   - Determines eligibility for a discount if the user drives **≥ 400 miles in the last 60 days**.
+   - Determines eligibility for a discount if the user **consistently driving and recording journeys for a year**.
    - Generates a reference code for qualifying users.
 
 4. **Mobile Sensor Integration**
@@ -59,13 +59,13 @@ The database has been initialised with 10 example users (1-10), and they can be 
 
 5. **User Interface**
 
-   - Displays journeys and scores using tabbed navigation.
+   - Only displays first journey score after the user has **recorded over 400 miles in the last 60 days**.
+   - Displays journeys and scores.
    - Includes a doughnut chart to visualize 30-day average scores.
    - Modal popups show discount information and reference codes.
 
-6. **QA & Testing**
+6. **Testing**
    - Functional and unit tests using **Jest**.
-   - Mocks sensor and location APIs for reliable automated testing.
 
 ---
 
@@ -84,7 +84,6 @@ Before running the project, make sure you have the following installed:
 
 - **Node.js** (v18.x or later recommended)
 - **npm** (comes with Node.js) or **yarn** as a package manager
-- **Expo CLI** (install globally using `npm install -g expo-cli`)
 - **Expo Go** app on your mobile device (for iOS or Android)
 - A code editor such as **VS Code**
 
@@ -100,13 +99,9 @@ Open the project in Expo Go on your mobile device by scanning the QR code from t
 
 ## Notes & Warnings
 
-- 🚨 **Physical Device Required**:  
+- **Physical Device Required**:  
   Tracking and sensor-based features (e.g., GPS, accelerometer) will **not** work in the Expo Go simulator.  
   You must run the project on a **physical device** to enable journey tracking.
-
-- 🖥️ **iOS Users**:  
-  If you are testing on iOS, you must use **Xcode** to build and run the project on a physical device.  
-  These features cannot be tested through Expo Go alone.
 
 ## Project Structure
 
@@ -129,8 +124,8 @@ The project follows a standard React Native + Expo layout with organized folders
 
 ## Testing
 
-This project includes **unit tests and integration tests** to ensure reliability and maintainability.  
-The tests are written using **Jest** and **@testing-library/react-native**.
+This project includes **unit tests** to ensure reliability and maintainability.  
+The tests are written using **Jest**.
 
 ### Location of Tests
 
@@ -150,19 +145,13 @@ or with yarn:
 yarn test
 ```
 
-### This will:
-
-- Run all test files inside the **tests** folder.
-- Display pass/fail results in the console.
-- Test Coverage
-
 To generate a coverage report, run:
 
 ```bash
 npm test -- --coverage
 ```
 
-This will output a coverage summary in the console and a detailed report inside the coverage/ folder (including an interactive HTML version you can open in a browser).
+This will output a summary in the console.
 
 **Author:** Amelia Goldsby
 
@@ -172,10 +161,10 @@ This will output a coverage summary in the console and a detailed report inside 
 
 ## Acknowledgements
 
-This project was developed as part of the **Major Project (Level 6)** module with QA Higher Education.
+This project was developed as part of the **Major Project (Level 6)** module with QA.
 
 I would like to acknowledge the following:
 
-- **QA Tutors & Supervisors** – for their guidance, feedback, and support throughout the project.
+- **QA Tutors** – for their guidance, feedback, and support throughout the project.
 - **Expo & React Native Communities** – for providing extensive documentation, open-source libraries, and forums that helped in solving development challenges.
 - **Third-Party Libraries** used in the project (React Navigation, Recharts, Safe Area Context, etc.) that enabled rapid development.
