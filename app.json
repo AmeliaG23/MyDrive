@@ -20,7 +20,10 @@
           "locationWhenInUsePermission": "This app uses your location to track your journeys."
         }
       ],
-      "expo-dev-client"
+      "expo-dev-client",
+      "expo-font",
+      "expo-router",
+      "expo-web-browser"
     ],
     "ios": {
       "supportsTablet": true,
