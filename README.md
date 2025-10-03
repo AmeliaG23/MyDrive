@@ -96,7 +96,7 @@ Open the project in Expo Go on your mobile device by scanning the QR code from t
 ## Notes & Warnings
 
 - **Physical Device Required**:  
-  Tracking and sensor-based features (e.g., GPS, accelerometer) will **not** work in the Expo Go simulator.  
+  Tracking features will **not** work in the Expo Go simulator.  
   You must run the project on a **physical device** to enable journey tracking.
 
 ## Project Structure
