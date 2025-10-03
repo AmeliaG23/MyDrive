@@ -48,22 +48,22 @@ The database has been initialised with 10 example users (1-10), and they can be 
 3. **Car Insurance Discount Eligibility**
 
    - Determines eligibility for a discount if the user **consistently driving and recording journeys for a year**.
-   - Generates a reference code for qualifying users.
+   - Generates a code for users who are eligible.
 
 4. **Mobile Sensor Integration**
 
-   - Collects accelerometer and gyroscope data to measure driving behavior.
+   - Collects telematics data to measure driving behavior.
    - Monitors phone usage while driving.
 
 5. **User Interface**
 
    - Only displays first journey score after the user has **recorded over 400 miles in the last 60 days**.
    - Displays journeys and scores.
-   - Includes a doughnut chart to visualize 30-day average scores.
-   - Modal popups show discount information and reference codes.
+   - Includes a doughnut chart to visualise 30-day average scores.
+   - Modal shows discount information and reference code.
 
 6. **Testing**
-   - Functional and unit tests using **Jest**.
+   - Unit tests using **Jest**.
 
 ## Getting Started
 
@@ -76,12 +76,11 @@ cd mydrive
 
 ## Requirements
 
-Before running the project, make sure you have the following installed:
+Before running the project, it requires the following:
 
-- **Node.js** (v18.x or later recommended)
-- **npm** (comes with Node.js) or **yarn** as a package manager
+- **npm** (comes with Node.js) or **yarn**
 - **Expo Go** app on your mobile device (for iOS or Android)
-- A code editor such as **VS Code**
+- A code editor- e.g., **VS Code**
 
 ### Running the App
 
@@ -91,7 +90,11 @@ npm install
 yarn install
 ```
 
-Open the project in Expo Go on your mobile device by scanning the QR code from the terminal or Expo DevTools.
+Once everything is installed run:
+```bash
+npx expo start
+```
+When the QR code is visible in the terminal, type **s** to switch to Expo Go. Then scan the **new** QR code with your phone camera and the app will load in Expo Go.
 
 ## Notes & Warnings
 
@@ -101,31 +104,30 @@ Open the project in Expo Go on your mobile device by scanning the QR code from t
 
 ## Project Structure
 
-The project follows a standard React Native + Expo layout with organized folders for clarity.
+The project follows a standard layout with organised folders for easy maintenance.
 
-📂 project-root  
+📂 root  
  ┣ 📂 app # Entry point and navigation setup  
  ┣ 📂 assets # Images utilised  
- ┣ 📂 components # Reusable UI components (charts, tabs, etc.)  
- ┣ 📂 context # Global state management (e.g., UserContext)  
- ┣ 📂 jest # Mocks used for Jest unit tests  
+ ┣ 📂 components # Reusable UI components
+ ┣ 📂 context # Global state management  
+ ┣ 📂 jest # Globalised mocks used for Jest unit tests  
  ┣ 📂 navigation # Navigation stacks and tab navigators  
- ┣ 📂 screens # Main app screens (HomeScreen, Settings, etc.)  
- ┣ 📂 services # Telematics tracking (tracks key metrics for score calculations)  
- ┣ 📂 styles # Centralized StyleSheet files for consistent styling  
- ┣ 📂 utils # Helper functions (e.g., score calculation, journey history)  
+ ┣ 📂 screens # App screens
+ ┣ 📂 services # Telematics tracking 
+ ┣ 📂 styles # StyleSheet files for consistent styling  
+ ┣ 📂 utils # Helper functions
  ┣ 📜 package.json # Dependencies and scripts  
  ┣ 📜 requirements.txt # Requirements required to run the app  
  ┣ 📜 README.md # Project documentation (this file)
 
 ## Testing
 
-This project includes **unit tests** to ensure reliability and maintainability.  
-The tests are written using **Jest**.
+This project includes **unit tests** to ensure reliability and maintainability. The tests are written using **Jest**.
 
 ### Location of Tests
 
-- All test files are stored inside the `__tests__/` directory, following a structured format.
+- All test files are stored inside the `__tests__/` folders.
 
 ### Running the Tests
 
@@ -149,15 +151,10 @@ npm test -- --coverage
 
 This will output a summary in the console.
 
-**Author:** Amelia Goldsby
-
-**Degree:** Level 6 QA - Major Project - A Dual-Focus Redesign of MyDrive: Enhancing Interfaces and Scoring Architecture
-
-**Date:** 03/10/2025
 
 ## Acknowledgements
 
-This project was developed as part of the **Major Project (Level 6)** module with QA.
+This project was developed as part of the **Major Project (Level 6)** module with **QA**.
 
 I would like to acknowledge the following:
 
