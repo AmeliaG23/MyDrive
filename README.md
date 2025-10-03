@@ -65,8 +65,6 @@ The database has been initialised with 10 example users (1-10), and they can be 
 6. **Testing**
    - Functional and unit tests using **Jest**.
 
----
-
 ## Getting Started
 
 ### Clone the repository
